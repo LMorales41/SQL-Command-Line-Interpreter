@@ -1,6 +1,10 @@
 #include "gtest/gtest.h"
 #include <iostream>
 #include <iomanip>
+#include "../../includes/sql/sql.h"
+#include "../../includes/table/table.h"
+#include "../../includes/parser/parser.h"
+#include "../../includes/table/typedefs.h"
 using namespace std;
 
 bool test_stub(bool debug = false)
@@ -16,7 +20,10 @@ bool test_sql(bool debug = false)
   if (debug){
     cout << "testB:: test-sub() entering test_sub" << endl;
   }
-  
+  string str = "make table employee fields  last,       first,         dep,      salary, year";
+  SQL sql;
+  sql.command(str);
+  str =  "select * from employee";
   return true;
 }
 

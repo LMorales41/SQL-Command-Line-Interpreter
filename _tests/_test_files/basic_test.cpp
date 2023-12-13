@@ -10,6 +10,7 @@
 #include "../../includes/sql/sql.h"
 #include "../../includes/table/table.h"
 #include "../../includes/parser/parser.h"
+#include "../../includes/table/typedefs.h"
 
 
 //------------------------------------------------------------------------------------------

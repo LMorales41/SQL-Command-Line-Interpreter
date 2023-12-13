@@ -196,6 +196,7 @@ void Parser::get_parse_tree()
     {
       column = keywords.get(strng);
     }
+    
     state = _table[state][column];
 
     //to bugfix and build
