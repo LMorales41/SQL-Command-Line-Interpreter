@@ -12,6 +12,7 @@ Parser::Parser(char* s)
   make_table();
   //cout << "getptree" << endl;
   get_parse_tree();
+  //ptree.print_lookup();
   //cout << "not this?" << endl;
   // cout << "my sentence: " << endl;
   // for (int i = 0; i < input_q.size(); i++)
@@ -26,6 +27,7 @@ Parser::Parser(char* s)
   //   cout << tokenized[i] << " ";
   // }
   // cout << endl;
+  
 }
 
 void Parser::set_string(char* s)
@@ -61,7 +63,7 @@ vector<string> Parser::tokenize(char* s)
   string removeq = "";
   for (int i = 0; i < temp.size(); i++)
   {
-    if (temp[i] == " " || temp[i] == "," || temp[i] == "\"" )
+    if (temp[i] == " " || temp[i] == "," || temp[i] == "\"" || temp[i] == "\t" || temp[i] == "\n")
     {
       
     }
@@ -196,7 +198,7 @@ void Parser::get_parse_tree()
     {
       column = keywords.get(strng);
     }
-    
+
     state = _table[state][column];
 
     //to bugfix and build

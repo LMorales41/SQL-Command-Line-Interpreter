@@ -12,7 +12,7 @@
 #include "../bplustree/map.h"
 #include "../bplustree/multimap.h"
 #include "../bplustree/set_class.h"
-
+#include "../stl_utils/vector_utilities.h"
 using namespace std;
 
 class SQL
@@ -23,7 +23,11 @@ class SQL
 
         Table command(string commandline);
         void get_keys();
-        vector<long> select_recnos(){return recnos;}
+        vector<long> select_recnos()
+        {
+            //cout << "size of this vector is: " << recnos.size() << endl;
+            return recnos;
+        }
         Table run_command(string commandstr);
 
     private:

@@ -3,7 +3,7 @@
 Table SQL::command(string commandline)
 {
     //Table t;
-    char s [300];
+    char s [500];
     strcpy(s, commandline.c_str());
     Parser prsr (s);
     ptree = prsr.parse_tree();
@@ -47,7 +47,6 @@ Table SQL::run_command(string commandstr)
     string pkey;
     vector<string>tempv;
     vector<string>tempvi;
-    Table t;
     if (commandstr == "make")
     {
         //make table
@@ -66,15 +65,26 @@ Table SQL::run_command(string commandstr)
             recnos = maket.select_recnos();
             return maket;
         }
+        // cout << "checking col : " << tempv.size() <<endl;
+        // for (int i = 0; i < tempv.size(); i++)
+        // {
+        //     cout << tempv[i] << ",";
+        // }
+        // cout << endl;
         //now I have all things necessary for make command
         //  - the command, the table name, and the vector of fields
         // now i build it
         Table maket(temp, tempv);
+        // cout << "table " << temp << " : " << endl;
+        // cout << maket << endl;
         recnos = maket.select_recnos();
         return maket;
 
     }
-    else if (commandstr == "insert")
+    string holding = "table_name";
+    string namefortree = ptree[holding].at(0);
+    Table t(namefortree);
+    if (commandstr == "insert")
     {
         //insert into
         pkey = "table_name"; //grabs name next
@@ -82,13 +92,17 @@ Table SQL::run_command(string commandstr)
         pkey = "values"; //grabs conditions next
         tempv = ptree[pkey]; //vector of conditions
 
+        cout << "checking values: " << endl;
+        for (int i = 0; i < tempv.size(); i++)
+        {
+            cout << tempv[i] << " ";
+        }
+        cout << endl;
+
 
         //now call insert_into
-        Table inser_tt(temp); //should already exist so only 1 arg
-        inser_tt.insert_into(tempv);
-        recnos = inser_tt.select_recnos();
-        return inser_tt;
-
+        t.insert_into(tempv);
+        recnos = t.select_recnos();
     }
     else if (commandstr == "select")
     {
@@ -96,9 +110,19 @@ Table SQL::run_command(string commandstr)
         pkey = "fields";
         tempv = ptree[pkey]; //i have vector of fields
 
+
+        cout << endl;
         pkey = "table_name";
         temp = ptree[pkey].at(0); //should be simple name
-        Table selct(temp); //1 arg bc it should already exist
+        if (tempv[0] == "*")
+        {
+            tempv = t.get_fields();
+        }
+        // cout << "checking fields: " << endl;
+        // for (int i = 0; i < tempv.size(); i++)
+        // {
+        //     cout << tempv[i] << " ";
+        // }
 
 
 
@@ -106,13 +130,21 @@ Table SQL::run_command(string commandstr)
         pkey = "condition"; 
         if (!ptree.contains(pkey)) //no conditions means just return all
         {
-            return selct.select_all();
+            cout << "calls select all" << endl;
+            return t.select_all();
         }
 
         tempvi = ptree[pkey]; //should have conditions here
+        // cout << "checking conditions:" << endl;
+        // for (int i = 0; i < tempvi.size(); i++)
+        // {
+        //     cout << tempvi[i] << " ";
+        // }
+        // cout << endl;
+        
         //now we call selects based off what we have
 
-        return selct.select(tempv, tempvi);
+        return t.select(tempv, tempvi);
         
 
 
