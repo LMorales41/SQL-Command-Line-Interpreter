@@ -47,7 +47,7 @@ Table SQL::run_command(string commandstr)
     string pkey;
     vector<string>tempv;
     vector<string>tempvi;
-    if (commandstr == "make")
+    if (commandstr == "make" || commandstr == "create")
     {
         //make table
         //if its a table, we need  a name
@@ -111,27 +111,33 @@ Table SQL::run_command(string commandstr)
         tempv = ptree[pkey]; //i have vector of fields
 
 
-        cout << endl;
-        pkey = "table_name";
-        temp = ptree[pkey].at(0); //should be simple name
-        if (tempv[0] == "*")
-        {
-            tempv = t.get_fields();
-        }
-        // cout << "checking fields: " << endl;
-        // for (int i = 0; i < tempv.size(); i++)
-        // {
-        //     cout << tempv[i] << " ";
-        // }
-
 
 
         //not all selects will have conditions
         pkey = "condition"; 
         if (!ptree.contains(pkey)) //no conditions means just return all
         {
-            cout << "calls select all" << endl;
-            return t.select_all();
+            if (tempv[0] == "*")
+            {
+                cout << "calls select all" << endl;
+                return t.select_all();
+            }
+            else
+            {
+                tempv = t.get_fields();
+                return t.select(tempv);
+            }
+            
+        }
+        if (tempv[0] == "*")
+        {
+            tempv = t.get_fields();
+        }
+
+        cout << "checking fields: " << endl;
+        for (int i = 0; i < tempv.size(); i++)
+        {
+            cout << tempv[i] << " ";
         }
 
         tempvi = ptree[pkey]; //should have conditions here

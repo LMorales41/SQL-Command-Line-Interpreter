@@ -24,6 +24,43 @@ int Table::get_numRecords()
 }
 
 
+Table Table::select(vectorstr fields)
+{
+    Table t (name, fields);
+    //cout << "after looking through the maps" << endl;
+    string orig_bfilename = name + ".bin"; //to read from existing .bin, not to write into new one
+    //I now have the long vector with all recno locations
+    //simply read binary file at the recnos from here, and turn them into a vector
+    string holds;
+    int insert_index;
+    vector<int> fieldindexes;
+    for (int i = 0; i < fields.size(); i++)
+    {
+        holds = fields[i];
+        cout << "holds: " << holds << endl;
+        insert_index = fieldMap.get(holds);
+        fieldindexes.push_back(insert_index);
+    }
+    FileRecord r2;
+    fstream f;
+    vectorstr row;
+    open_fileRW(f, orig_bfilename.c_str());
+    int i = 0;
+    long bytes = r2.read(f, i); //empty envelop to be filled by the FileRecord object
+    //cout << "start byte (long returned from r2.read(f,i)): " << bytes << endl;
+    while (bytes>0)
+    {
+        //cout<< i<<": "<<r2<<endl; //if I wanna change the look of this output, i need to change the
+                                //outs operator for r2, to add spaces between each field
+        row = r2.vectorized_record(fieldindexes);
+        i++;
+        bytes = r2.read(f, i);
+        //cout << "loop byte (long returned from r2.read from the loop): " << bytes <<endl;
+    }
+    //t.insert_into()
+    return t;
+}
+
 
 void Table::read_info() //opens txt file, populates fieldNames vector with info from file
 {
@@ -62,17 +99,17 @@ void Table::insert_into(vectorstr collection)
     // cout << "the size of it: " << collection.size() << endl;
     // print_vector(collection);
     //cout << "writing this vector" << endl;
-    cout << "table name: " << name << endl;
-    cout << "is writing into the following file: " << _bfilename << endl;
+    // cout << "table name: " << name << endl;
+    // cout << "is writing into the following file: " << _bfilename << endl;
     _recno = r.write(f);
-    recnos.push_back(_recno);
-    cout << "recnos after inserting: " << endl;
+    //recnos.push_back(_recno);
+    // cout << "recnos after inserting: " << endl;
     //cout << "recno: " <<_recno << endl;
-    cout << "collection size: " << recnos.size() << endl;
-    for (int i = 0; i < recnos.size(); i++)
-    {
-        cout << recnos[i] << " ";
-    }
+    // cout << "collection size: " << recnos.size() << endl;
+    // for (int i = 0; i < recnos.size(); i++)
+    // {
+    //     cout << recnos[i] << " ";
+    // }
     //cout << endl;
     for (int i = 0; i < collection.size(); i++)
     {
@@ -87,89 +124,89 @@ void Table::insert_into(vectorstr collection)
 
 Table Table::select_all()
 {
-    serial++;
-    string newname = name + to_string(serial); // new filename for table we are going to create
-    //cout << newname << endl;
-    Table t (newname, fieldNames);
-    //Table t (newname); //new table is constructed with the parameters
-    //now create a record of people based on field then performing whatever oper does
-    //ex. if given lname(field) = (oper) yao (otherField) then we grab records from Yaos
-    //cout << "index: " << index <<endl;
-    //cout << fieldMap << endl;
-    int insert_index;
-    string holds;
-    vector<int> fieldindexes;
-    for (int i = 0; i < fieldNames.size(); i++)
-    {
-        holds = fieldNames[i];
-        insert_index = fieldMap.get(holds);
-        fieldindexes.push_back(insert_index);
-    }
-    vector<long>field_recnos = select_recnos();
-    // cout << "field_recnos: " << endl;
-    // for (int i = 0; i < field_recnos.size(); i++)
+    // serial++;
+    // string newname = name + to_string(serial); // new filename for table we are going to create
+    // //cout << newname << endl;
+    // Table t (newname, fieldNames);
+    // //Table t (newname); //new table is constructed with the parameters
+    // //now create a record of people based on field then performing whatever oper does
+    // //ex. if given lname(field) = (oper) yao (otherField) then we grab records from Yaos
+    // //cout << "index: " << index <<endl;
+    // //cout << fieldMap << endl;
+    // int insert_index;
+    // string holds;
+    // vector<int> fieldindexes;
+    // for (int i = 0; i < fieldNames.size(); i++)
     // {
-    //     cout << field_recnos[i] << endl;
+    //     holds = fieldNames[i];
+    //     insert_index = fieldMap.get(holds);
+    //     fieldindexes.push_back(insert_index);
     // }
-    // cout << "end of records" << endl;
-    //cout << "after looking through the maps" << endl;
-    string orig_bfilename = name + ".bin"; //to read from existing .bin, not to write into new one
-    //I now have the long vector with all recno locations
-    //simply read binary file at the recnos from here, and turn them into a vector
-    FileRecord r;
-    fstream f;
-    vectorstr row;
-    open_fileRW(f, orig_bfilename.c_str());
-    //test for recnos (as of 12:12pm wed dec 6 it works please dont stop working i miss my cats please dont stop working)
-    // //cout << "after opening file, before recnos vector" << endl;
+    // vector<long>field_recnos = select_recnos();
+    // // cout << "field_recnos: " << endl;
+    // // for (int i = 0; i < field_recnos.size(); i++)
+    // // {
+    // //     cout << field_recnos[i] << endl;
+    // // }
+    // // cout << "end of records" << endl;
+    // //cout << "after looking through the maps" << endl;
+    // string orig_bfilename = name + ".bin"; //to read from existing .bin, not to write into new one
+    // //I now have the long vector with all recno locations
+    // //simply read binary file at the recnos from here, and turn them into a vector
+    // FileRecord r;
+    // fstream f;
+    // vectorstr row;
+    // open_fileRW(f, orig_bfilename.c_str());
+    // //test for recnos (as of 12:12pm wed dec 6 it works please dont stop working i miss my cats please dont stop working)
+    // // //cout << "after opening file, before recnos vector" << endl;
     
-    // cout << "these are the record numbers(location) of the desired field '" << otherField << "'" << endl;
-    //cout << "before recnos loop" << endl;
-    //cout << "in recnos: ";
-    // cout << name << " table recnos: " << endl;
-    // for (int i = 0; i < field_recnos.size(); i++)
-    // {
-    //     cout << field_recnos[i] << " ";
-    // }
-    // cout << endl;
-    // cout << "before I begin inserting this is what the table looks like " << endl;
-    // cout << t << endl;
+    // // cout << "these are the record numbers(location) of the desired field '" << otherField << "'" << endl;
+    // //cout << "before recnos loop" << endl;
+    // //cout << "in recnos: ";
+    // // cout << name << " table recnos: " << endl;
+    // // for (int i = 0; i < field_recnos.size(); i++)
+    // // {
+    // //     cout << field_recnos[i] << " ";
+    // // }
+    // // cout << endl;
+    // // cout << "before I begin inserting this is what the table looks like " << endl;
+    // // cout << t << endl;
 
-    for (int i = 0 ; i < field_recnos.size(); i++)
-    { 
+    // for (int i = 0 ; i < field_recnos.size(); i++)
+    // { 
         
-        long temp = field_recnos[i];
+    //     long temp = field_recnos[i];
         
-        r.read(f, temp);
-        //cout << "before assigning row" << endl;
-        row = r.vectorized_record(fieldindexes); //this will change every loop
+    //     r.read(f, temp);
+    //     //cout << "before assigning row" << endl;
+    //     row = r.vectorized_record(fieldindexes); //this will change every loop
 
-        t.insert_into(row); //inserts the row u are in!
-        //should be completely finished wiht table once loop ends!
+    //     t.insert_into(row); //inserts the row u are in!
+    //     //should be completely finished wiht table once loop ends!
 
-        //cout << "this is the vector created from pos " << field_recnos[i] << ": " <<endl;
-        //this is to check wtf is inside row bc idk 
-        // for (int j = 0; j < row.size(); j++)
-        // {
-        //     //cout << "in row: ";
-        //     cout << j << ":" <<row[j] << " " << endl;
-        // }
-    }
-    //check row but outside of loop to see exactly what it looks like to a normal human being
-    //this will only show the LAST record pulled, nothing else here
-    // i like trtles
-    // for (int j = 0; j < row.size(); j++)
-    // {
-    //     //cout << "in row: ";
-    //     cout << j << ":" <<row[j] << " " << endl;
+    //     //cout << "this is the vector created from pos " << field_recnos[i] << ": " <<endl;
+    //     //this is to check wtf is inside row bc idk 
+    //     // for (int j = 0; j < row.size(); j++)
+    //     // {
+    //     //     //cout << "in row: ";
+    //     //     cout << j << ":" <<row[j] << " " << endl;
+    //     // }
     // }
-    //end of skibidi
+    // //check row but outside of loop to see exactly what it looks like to a normal human being
+    // //this will only show the LAST record pulled, nothing else here
+    // // i like trtles
+    // // for (int j = 0; j < row.size(); j++)
+    // // {
+    // //     //cout << "in row: ";
+    // //     cout << j << ":" <<row[j] << " " << endl;
+    // // }
+    // //end of skibidi
 
-    f.close();
-    //recnos = field_recnos; //assign it to the private variable
-    t.recnos = recnos;
+    // f.close();
+    // //recnos = field_recnos; //assign it to the private variable
+    // t.recnos = recnos;
     //t.insert_into()
-    return t;
+    return *this;
 
 }
 
@@ -372,7 +409,7 @@ Table Table::select(vectorstr fields, string field , string oper , string otherF
     //end of skibidi
 
     f.close();
-    //recnos = field_recnos; //assign it to the private variable
+    recnos = field_recnos; //assign it to the private variable
     t.recnos = field_recnos;
     //t.insert_into()
     return t;
@@ -476,7 +513,7 @@ Table Table::select(vectorstr fields, Queue<Token*> post)
     }
     f.close();
 
-    //recnos = field_recnos; //assign it to the private variable
+    recnos = field_recnos; //assign it to the private variable
     t.recnos = field_recnos;
     //t.insert_into()
     return t;
@@ -485,20 +522,30 @@ Table Table::select(vectorstr fields, Queue<Token*> post)
 Table Table::select(vectorstr fields, vectorstr conditions)
 {
     //cout << "size of fields that I am being handed: " << fields.size() <<endl;
+    cout << "size of conditions I am being handed: " << conditions.size() << endl;
     shunting_yard sy1(conditions);
     //sy1.print_queue();
     Queue<Token*> post = sy1.get_postfix();
+    // Queue<Token*> copy = sy1.get_postfix();
+    // int copysize = copy.size();
+    // cout << "this is postfix: " << endl;
+    // for (int i = 0; i < copysize; i++)
+    // {
+    //     cout << *copy.pop() << " ";
+    // }
+    cout << endl;
     RPN rpn1(post);
     rpn1.do_rpn_thing(fieldMap,indices);
+
     vector<long> field_recnos = rpn1.get_solution();
-    //cout << "size for vec: " << field_recnos.size() << endl;
+    cout << "size for vec: " << field_recnos.size() << endl;
     sort(field_recnos.begin(), field_recnos.end());
-    // cout << "field recnos: " << endl;
-    // cout << "size: " << field_recnos.size() << endl;
-    // for (int i = 0; i < field_recnos.size(); i++)
-    // {
-    //     cout << "f_r: " << field_recnos[i] << endl;
-    // }
+    cout << "field recnos: " << endl;
+    cout << "size: " << field_recnos.size() << endl;
+    for (int i = 0; i < field_recnos.size(); i++)
+    {
+        cout << "f_r: " << field_recnos[i] << endl;
+    }
     //so far it has everthing I need? ok runs fine
 
     string newname = name + to_string(serial); // new filename for table we are going to create
@@ -517,6 +564,7 @@ Table Table::select(vectorstr fields, vectorstr conditions)
 
     //cout << "after looking through the maps" << endl;
     string orig_bfilename = name + ".bin"; //to read from existing .bin, not to write into new one
+    cout << "reads from this binary file " << orig_bfilename << endl;
     //I now have the long vector with all recno locations
     //simply read binary file at the recnos from here, and turn them into a vector
     FileRecord r;
@@ -581,7 +629,7 @@ Table Table::select(vectorstr fields, vectorstr conditions)
     }
     f.close();
 
-    //recnos = field_recnos; //assign it to the private variable
+    recnos = field_recnos; //assign it to the private variable
     t.recnos = field_recnos;
     //t.insert_into()
     return t;

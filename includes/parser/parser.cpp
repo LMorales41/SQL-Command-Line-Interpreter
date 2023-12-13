@@ -102,6 +102,7 @@ void Parser::make_map()
   keywords.insert("insert", INSERT);
   keywords.insert("into", INTO);
   keywords.insert("make", MAKE);
+  keywords.insert("create", MAKE);
   
   //all relational strings
   keywords.insert(">", RELATIONAL);

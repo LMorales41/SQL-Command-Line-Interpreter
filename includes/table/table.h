@@ -75,6 +75,7 @@ public:
     Table select(vectorstr fields, string field , string oper , string otherField);
     Table select(vectorstr fields, Queue<Token*> post);
     Table select(vectorstr fields, vectorstr conditions);
+    Table select(vectorstr fields);
     vector<long> select_recnos();
     vectorstr set_fields(vectorstr& field_names);
     vectorstr get_fields();
