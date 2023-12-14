@@ -26,7 +26,12 @@ int Table::get_numRecords()
 
 Table Table::select(vectorstr fields)
 {
-    Table t (name, fields);
+    serial++;
+    cout << "calls select with no conditions only fields" << endl;
+    for (int i = 0; i < fields.size(); i++)
+    {
+        cout << fields[i] << endl;
+    }
     //cout << "after looking through the maps" << endl;
     string orig_bfilename = name + ".bin"; //to read from existing .bin, not to write into new one
     //I now have the long vector with all recno locations
@@ -37,27 +42,37 @@ Table Table::select(vectorstr fields)
     for (int i = 0; i < fields.size(); i++)
     {
         holds = fields[i];
-        cout << "holds: " << holds << endl;
+        //cout << "holds: " << holds << endl;
         insert_index = fieldMap.get(holds);
         fieldindexes.push_back(insert_index);
     }
-    FileRecord r2;
+    string newname = name + to_string(serial);
+    Table t (newname, fields);
+    FileRecord r;
     fstream f;
     vectorstr row;
-    open_fileRW(f, orig_bfilename.c_str());
-    int i = 0;
-    long bytes = r2.read(f, i); //empty envelop to be filled by the FileRecord object
-    //cout << "start byte (long returned from r2.read(f,i)): " << bytes << endl;
-    while (bytes>0)
-    {
-        //cout<< i<<": "<<r2<<endl; //if I wanna change the look of this output, i need to change the
-                                //outs operator for r2, to add spaces between each field
-        row = r2.vectorized_record(fieldindexes);
-        i++;
-        bytes = r2.read(f, i);
-        //cout << "loop byte (long returned from r2.read from the loop): " << bytes <<endl;
+
+    for (int i = 0 ; i < recnos.size(); i++)
+    { 
+        
+        long temp = recnos[i];
+        
+        r.read(f, temp);
+        //cout << "before assigning row" << endl;
+        row = r.vectorized_record(fieldindexes); //this will change every loop
+
+        t.insert_into(row); //inserts the row u are in!
+        //should be completely finished wiht table once loop ends!
+
+        //cout << "this is the vector created from pos " << field_recnos[i] << ": " <<endl;
+        //this is to check wtf is inside row bc idk 
+        // for (int j = 0; j < row.size(); j++)
+        // {
+        //     //cout << "in row: ";
+        //     cout << j << ":" <<row[j] << " " << endl;
+        // }
     }
-    //t.insert_into()
+
     return t;
 }
 
@@ -206,6 +221,7 @@ Table Table::select_all()
     // //recnos = field_recnos; //assign it to the private variable
     // t.recnos = recnos;
     //t.insert_into()
+    //return select(fieldNames);
     return *this;
 
 }
@@ -522,7 +538,7 @@ Table Table::select(vectorstr fields, Queue<Token*> post)
 Table Table::select(vectorstr fields, vectorstr conditions)
 {
     //cout << "size of fields that I am being handed: " << fields.size() <<endl;
-    cout << "size of conditions I am being handed: " << conditions.size() << endl;
+    //out << "size of conditions I am being handed: " << conditions.size() << endl;
     shunting_yard sy1(conditions);
     //sy1.print_queue();
     Queue<Token*> post = sy1.get_postfix();
@@ -533,19 +549,19 @@ Table Table::select(vectorstr fields, vectorstr conditions)
     // {
     //     cout << *copy.pop() << " ";
     // }
-    cout << endl;
+    //cout << endl;
     RPN rpn1(post);
     rpn1.do_rpn_thing(fieldMap,indices);
 
     vector<long> field_recnos = rpn1.get_solution();
-    cout << "size for vec: " << field_recnos.size() << endl;
+    //cout << "size for vec: " << field_recnos.size() << endl;
     sort(field_recnos.begin(), field_recnos.end());
-    cout << "field recnos: " << endl;
-    cout << "size: " << field_recnos.size() << endl;
-    for (int i = 0; i < field_recnos.size(); i++)
-    {
-        cout << "f_r: " << field_recnos[i] << endl;
-    }
+    // cout << "field recnos: " << endl;
+    // cout << "size: " << field_recnos.size() << endl;
+    // for (int i = 0; i < field_recnos.size(); i++)
+    // {
+    //     cout << "f_r: " << field_recnos[i] << endl;
+    // }
     //so far it has everthing I need? ok runs fine
 
     string newname = name + to_string(serial); // new filename for table we are going to create
@@ -564,7 +580,7 @@ Table Table::select(vectorstr fields, vectorstr conditions)
 
     //cout << "after looking through the maps" << endl;
     string orig_bfilename = name + ".bin"; //to read from existing .bin, not to write into new one
-    cout << "reads from this binary file " << orig_bfilename << endl;
+    //cout << "reads from this binary file " << orig_bfilename << endl;
     //I now have the long vector with all recno locations
     //simply read binary file at the recnos from here, and turn them into a vector
     FileRecord r;
@@ -670,7 +686,7 @@ void Table::make_file()
     // cout << "filename: " <<_bfilename.c_str() << endl;
     // cout << r << endl;
     //opening binary file
-    open_fileRW(f, _bfilename.c_str());
+    open_fileW(f, _bfilename.c_str());
     //open_fileW(f, _bfilename.c_str()); //this is to pass basic test
     // _recno = r.write(f);
     // cout << "wrote into record: " << _recno << endl;

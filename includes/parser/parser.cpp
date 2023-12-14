@@ -17,7 +17,7 @@ Parser::Parser(char* s)
   // cout << "my sentence: " << endl;
   // for (int i = 0; i < input_q.size(); i++)
   // {
-  //   cout << input_q[i] << " ";
+  //   cout << input_q[i] << ",";
   // }
   // cout << endl;
   // cout << "my ptree: " << endl;
@@ -52,7 +52,25 @@ vector<string> Parser::tokenize(char* s)
   {
     //process token here...
     //cout<<setw(10)<<t.type_string()<<setw(10)<<t<<endl;
-    temp.push_back(t.get_string()); //
+    if ( t.token_str() == "ALFA" || t.get_string() != "," || t.token_str() != "SPACES")
+    { 
+      if (t.token_str() == "PUNC")
+      {
+        if (t.get_string() == "(" || t.get_string() == ")")
+        {
+          temp.push_back(t.get_string());
+        }
+      }
+      else
+      {
+        temp.push_back(t.get_string()); //
+      }
+      
+    }
+    else
+    {
+      
+    }
 
     t = Token();
     stk>>t;

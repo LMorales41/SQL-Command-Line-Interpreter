@@ -80,7 +80,7 @@ bool sql_basic(bool debug = false)
 
 // ==============================
 // global BAD!
-bool debug = true;
+bool debug = false;
 // ==============================
 
 TEST(SQL_BASIC, SQLBasic) {

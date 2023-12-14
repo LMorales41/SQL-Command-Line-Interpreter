@@ -67,23 +67,23 @@ void RPN::do_rpn_thing(Map <string, long>& fieldMap, vector<MMap<string, long>>&
             //cout << "temp: " << temp->get_string() << endl;
             if (temp->get_string() == "and") //intersection
             {
-                cout << "intersection" << endl;
+                //cout << "intersection" << endl;
                 l1 = temp2->get_records();
                 l2 = temp3->get_records();
-                cout << "l1: " << l1.size() << endl;
-                cout << "l2: " << l2.size() << endl;
-                cout << "elements inside l1 : " << endl;
-                for (int z = 0; z < l1.size(); z++)
-                {
-                    cout << l1[z] << " ";
-                }
-                cout << endl;
-                cout << "elements inside l2 : " << endl;
-                for (int z = 0; z < l2.size(); z++)
-                {
-                    cout << l2[z] << " ";
-                }
-                cout << endl;
+                // cout << "l1: " << l1.size() << endl;
+                // cout << "l2: " << l2.size() << endl;
+                // cout << "elements inside l1 : " << endl;
+                // for (int z = 0; z < l1.size(); z++)
+                // {
+                //     cout << l1[z] << " ";
+                // }
+                // cout << endl;
+                // cout << "elements inside l2 : " << endl;
+                // for (int z = 0; z < l2.size(); z++)
+                // {
+                //     cout << l2[z] << " ";
+                // }
+                // cout << endl;
                 
                 for (int j = 0; j < l2.size(); j++) //goes through first vector
                 {
@@ -98,13 +98,13 @@ void RPN::do_rpn_thing(Map <string, long>& fieldMap, vector<MMap<string, long>>&
                         }
                     }
                 }
-                cout << "l3 size : " << endl;
-                cout << l3.size() << endl;
-                for (int z = 0; z < l3.size(); z++)
-                {
-                    cout << l3[z] << " ";
-                }
-                cout << endl;
+                // cout << "l3 size : " << endl;
+                // cout << l3.size() << endl;
+                // for (int z = 0; z < l3.size(); z++)
+                // {
+                //     cout << l3[z] << " ";
+                // }
+                // cout << endl;
                 //this puts intersection into the stack
                 temp = new Solution (l3);
                 solutionholder.push(temp);
@@ -114,7 +114,7 @@ void RPN::do_rpn_thing(Map <string, long>& fieldMap, vector<MMap<string, long>>&
             }
             else //union
             {
-                cout << "union" << endl;
+                //cout << "union" << endl;
                 l1 = temp2->get_records();
                 l2 = temp3->get_records();
                 l3 = l1;
@@ -128,12 +128,12 @@ void RPN::do_rpn_thing(Map <string, long>& fieldMap, vector<MMap<string, long>>&
                 sort(l3.begin(), l3.end());
                 auto last = std::unique(l3.begin(), l3.end()); //last will be itr where the dups are pushed to
                 l3.erase(last, l3.end()); //erases starting at last to end of vector
-                cout << "l3: " << endl;
-                for (int p=0; p < l3.size(); p++)
-                {
-                    cout << l3[p] << " ";
-                }
-                cout << endl;
+                // cout << "l3: " << endl;
+                // for (int p=0; p < l3.size(); p++)
+                // {
+                //     cout << l3[p] << " ";
+                // }
+                // cout << endl;
                 //this will only leave uniques
                 //cout << "l3 after sorting: " << l3.size() << endl;
                 //this puts intersection into the stack

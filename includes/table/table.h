@@ -115,7 +115,7 @@ public:
         //cout << "start byte (long returned from r2.read(f,i)): " << bytes << endl;
         while (bytes>0)
         {
-            cout<< i<<": "<<r2<<endl; //if I wanna change the look of this output, i need to change the
+            cout << i << "\t" << r2 << endl; //if I wanna change the look of this output, i need to change the
                                     //outs operator for r2, to add spaces between each field
             i++;
             bytes = r2.read(f, i);

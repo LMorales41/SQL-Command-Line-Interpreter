@@ -22,8 +22,11 @@ bool test_sql(bool debug = false)
   }
   string str = "make table employee fields  last,       first,         dep,      salary, year";
   SQL sql;
-  sql.command(str);
-  str =  "select * from employee";
+  //sql.command(str);
+
+  Table t = sql.command(str);
+  cout << t << endl;
+  //str =  "select * from employee";
   return true;
 }
 

@@ -57,8 +57,7 @@ ostream& operator <<(ostream& outs,const FileRecord& r)
 {
     for (int i = 0; i < r.MAX+1; i++)
     {
-        outs<< r._record[i];
-        outs << " ";
+        outs<< r._record[i] << "\t";
     }
    //outs << " ";
     return outs;
