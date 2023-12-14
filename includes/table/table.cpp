@@ -27,11 +27,11 @@ int Table::get_numRecords()
 Table Table::select(vectorstr fields)
 {
     serial++;
-    cout << "calls select with no conditions only fields" << endl;
-    for (int i = 0; i < fields.size(); i++)
-    {
-        cout << fields[i] << endl;
-    }
+    //cout << "calls select with no conditions only fields" << endl;
+    // for (int i = 0; i < fields.size(); i++)
+    // {
+    //     cout << fields[i] << endl;
+    // }
     //cout << "after looking through the maps" << endl;
     string orig_bfilename = name + ".bin"; //to read from existing .bin, not to write into new one
     //I now have the long vector with all recno locations
@@ -52,26 +52,20 @@ Table Table::select(vectorstr fields)
     fstream f;
     vectorstr row;
 
-    for (int i = 0 ; i < recnos.size(); i++)
-    { 
-        
-        long temp = recnos[i];
-        
-        r.read(f, temp);
-        //cout << "before assigning row" << endl;
-        row = r.vectorized_record(fieldindexes); //this will change every loop
-
-        t.insert_into(row); //inserts the row u are in!
-        //should be completely finished wiht table once loop ends!
-
-        //cout << "this is the vector created from pos " << field_recnos[i] << ": " <<endl;
-        //this is to check wtf is inside row bc idk 
-        // for (int j = 0; j < row.size(); j++)
-        // {
-        //     //cout << "in row: ";
-        //     cout << j << ":" <<row[j] << " " << endl;
-        // }
+    int i = 0;
+    long bytes = r.read(f, i); //empty envelop to be filled by the FileRecord object
+    //cout << "start byte (long returned from r2.read(f,i)): " << bytes << endl;
+    while (bytes>0)
+    {
+        // cout << i << "\t" << r << endl; //if I wanna change the look of this output, i need to change the
+        //                         //outs operator for r2, to add spaces between each field
+        i++;
+        bytes = r.read(f, i);
+        row = r.vectorized_record(fieldindexes);
+        t.insert_into(row);
+        //cout << "loop byte (long returned from r2.read from the loop): " << bytes <<endl;
     }
+    f.close();
 
     return t;
 }
