@@ -30,9 +30,9 @@ class SQL
         }
         Table run_command(string commandstr);
         vector<long> _recnos;
-        mmap_ss ptree;
-    private:
         
+    private:
+        mmap_ss ptree;
         vector<string>values;
         vector<string>keys;
         vector<vector<string>> queries;

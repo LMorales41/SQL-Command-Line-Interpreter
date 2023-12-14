@@ -18,8 +18,9 @@ Table SQL::command(string commandline)
     moving = ptree[command].at(0);
     // string mysanity = ptree[table].at(0);
     // cout << "im going to cry" << mysanity << endl;
-    return run_command(moving);
-    
+    _keep_track_table = run_command(moving);
+   // ptree.clear();
+    return _keep_track_table;
 
     //return t;
 }
@@ -33,14 +34,14 @@ Table SQL::run_command(string commandstr)
     vector<string>tempvi;
     // cout << "ptree in run command: " << endl;
     // cout << ptree << endl;
-    // pkey = "table_name";
-    // vector<string> tempp = ptree[pkey];
-    // string tbl_name = tempp[0];
 
-    // cout << "tbl name before anything else: " << tbl_name << endl;
     //ptree.print_lookup();
-    //string test = "table_name";
-    //cout << ptree[test].at(0) << endl;
+    // string tbl = "table_name";
+    // string tbl_name = ptree[tbl][0];
+    // cout << "tbl name before anything else: " << tbl_name << endl;
+
+
+
     if (commandstr == "make" || commandstr == "create")
     {
         //make table
@@ -98,6 +99,8 @@ Table SQL::run_command(string commandstr)
 
         //now call insert_into
         t.insert_into(tempv);
+        _keep_track_table = t;
+        return _keep_track_table;
     }
     else if (commandstr == "select")
     {
@@ -165,7 +168,6 @@ Table SQL::run_command(string commandstr)
 
 
     }
-    Table t;
-    return t;
+    return _keep_track_table;
 }
 

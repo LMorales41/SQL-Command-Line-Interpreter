@@ -80,7 +80,7 @@ bool sql_basic(bool debug = false)
 
 // ==============================
 // global BAD!
-bool debug = false;
+bool debug = true;
 // ==============================
 
 TEST(SQL_BASIC, SQLBasic) {
@@ -293,7 +293,7 @@ Table name: _select_table_34, records: 4
 
 basic_test: records selected: 0 1 2 3 
 
->select last, first, year from employee //i changed age to year bc its a type
+>select last, first, age from employee 
 There is no condition
 
 Table name: _select_table_38, records: 4
