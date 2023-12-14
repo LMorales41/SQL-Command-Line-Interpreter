@@ -53,6 +53,7 @@ long FileRecord::read(fstream &ins, long recno){
     return ins.gcount();
 
 }
+
 ostream& operator <<(ostream& outs,const FileRecord& r)
 {
     for (int i = 0; i < r.MAX+1; i++)
