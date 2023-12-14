@@ -35,7 +35,7 @@ public:
 
         friend bool operator ==(const Iterator& left,const Iterator& right)  //true if left == right
         {
-            left._ptr == right._ptr;
+            return left._ptr == right._ptr;
         }
 
 
