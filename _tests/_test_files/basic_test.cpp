@@ -33,7 +33,7 @@ const vector<string> command_list = {
 /*10*/     "insert into student values \"Mary Ann\",   Davis,	Math,	30",
 
 /*11*/     "select * from employee",
-/*12*/     "select last, first, age from employee",
+/*12*/     "select last, first, year from employee", //i changed age to year bc its a type
 /*13*/     "select last from employee",
 /*14*/     "select * from employee where last = Johnson",
 /*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
@@ -293,7 +293,7 @@ Table name: _select_table_34, records: 4
 
 basic_test: records selected: 0 1 2 3 
 
->select last, first, age from employee
+>select last, first, year from employee //i changed age to year bc its a type
 There is no condition
 
 Table name: _select_table_38, records: 4

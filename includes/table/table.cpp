@@ -37,6 +37,8 @@ Table Table::select(vectorstr fields)
     //I now have the long vector with all recno locations
     //simply read binary file at the recnos from here, and turn them into a vector
     string holds;
+    // cout << "here is fieldmap: " << endl;
+    // cout << fieldMap << endl;
     int insert_index;
     vector<int> fieldindexes;
     for (int i = 0; i < fields.size(); i++)
@@ -46,27 +48,39 @@ Table Table::select(vectorstr fields)
         insert_index = fieldMap.get(holds);
         fieldindexes.push_back(insert_index);
     }
+    // cout << "fieldindexes: " << endl;
+    // for (int i = 0 ; i < fieldindexes.size(); i++)
+    // {
+    //     cout << fieldindexes[i] <<  " ";
+    // }
+    // cout << endl;
     string newname = name + to_string(serial);
     Table t (newname, fields);
     FileRecord r;
     fstream f;
     vectorstr row;
-
+    
+    open_fileRW(f, orig_bfilename.c_str());
     int i = 0;
     long bytes = r.read(f, i); //empty envelop to be filled by the FileRecord object
+
     //cout << "start byte (long returned from r2.read(f,i)): " << bytes << endl;
     while (bytes>0)
     {
-        // cout << i << "\t" << r << endl; //if I wanna change the look of this output, i need to change the
+        //cout << i << "\t" << r << endl; //if I wanna change the look of this output, i need to change the
         //                         //outs operator for r2, to add spaces between each field
-        i++;
-        bytes = r.read(f, i);
         row = r.vectorized_record(fieldindexes);
         t.insert_into(row);
+        recnos.push_back(i);
+        i++;
+        bytes = r.read(f, i);
+        //row = r.vectorized_record(fieldindexes);
+        //t.insert_into(row);
         //cout << "loop byte (long returned from r2.read from the loop): " << bytes <<endl;
     }
     f.close();
-
+    
+    t.recnos = recnos;
     return t;
 }
 
@@ -133,89 +147,31 @@ void Table::insert_into(vectorstr collection)
 
 Table Table::select_all()
 {
-    // serial++;
-    // string newname = name + to_string(serial); // new filename for table we are going to create
-    // //cout << newname << endl;
-    // Table t (newname, fieldNames);
-    // //Table t (newname); //new table is constructed with the parameters
-    // //now create a record of people based on field then performing whatever oper does
-    // //ex. if given lname(field) = (oper) yao (otherField) then we grab records from Yaos
-    // //cout << "index: " << index <<endl;
-    // //cout << fieldMap << endl;
-    // int insert_index;
-    // string holds;
-    // vector<int> fieldindexes;
-    // for (int i = 0; i < fieldNames.size(); i++)
-    // {
-    //     holds = fieldNames[i];
-    //     insert_index = fieldMap.get(holds);
-    //     fieldindexes.push_back(insert_index);
-    // }
-    // vector<long>field_recnos = select_recnos();
-    // // cout << "field_recnos: " << endl;
-    // // for (int i = 0; i < field_recnos.size(); i++)
-    // // {
-    // //     cout << field_recnos[i] << endl;
-    // // }
-    // // cout << "end of records" << endl;
-    // //cout << "after looking through the maps" << endl;
-    // string orig_bfilename = name + ".bin"; //to read from existing .bin, not to write into new one
-    // //I now have the long vector with all recno locations
-    // //simply read binary file at the recnos from here, and turn them into a vector
-    // FileRecord r;
-    // fstream f;
-    // vectorstr row;
-    // open_fileRW(f, orig_bfilename.c_str());
-    // //test for recnos (as of 12:12pm wed dec 6 it works please dont stop working i miss my cats please dont stop working)
-    // // //cout << "after opening file, before recnos vector" << endl;
     
-    // // cout << "these are the record numbers(location) of the desired field '" << otherField << "'" << endl;
-    // //cout << "before recnos loop" << endl;
-    // //cout << "in recnos: ";
-    // // cout << name << " table recnos: " << endl;
-    // // for (int i = 0; i < field_recnos.size(); i++)
-    // // {
-    // //     cout << field_recnos[i] << " ";
-    // // }
-    // // cout << endl;
-    // // cout << "before I begin inserting this is what the table looks like " << endl;
-    // // cout << t << endl;
+    string orig_bfilename = name + ".bin";
+    FileRecord r;
+    fstream f;
+    open_fileRW(f, orig_bfilename.c_str());
+    int i = 0;
+    long bytes = r.read(f, i); //empty envelop to be filled by the FileRecord object
 
-    // for (int i = 0 ; i < field_recnos.size(); i++)
-    // { 
-        
-    //     long temp = field_recnos[i];
-        
-    //     r.read(f, temp);
-    //     //cout << "before assigning row" << endl;
-    //     row = r.vectorized_record(fieldindexes); //this will change every loop
-
-    //     t.insert_into(row); //inserts the row u are in!
-    //     //should be completely finished wiht table once loop ends!
-
-    //     //cout << "this is the vector created from pos " << field_recnos[i] << ": " <<endl;
-    //     //this is to check wtf is inside row bc idk 
-    //     // for (int j = 0; j < row.size(); j++)
-    //     // {
-    //     //     //cout << "in row: ";
-    //     //     cout << j << ":" <<row[j] << " " << endl;
-    //     // }
-    // }
-    // //check row but outside of loop to see exactly what it looks like to a normal human being
-    // //this will only show the LAST record pulled, nothing else here
-    // // i like trtles
-    // // for (int j = 0; j < row.size(); j++)
-    // // {
-    // //     //cout << "in row: ";
-    // //     cout << j << ":" <<row[j] << " " << endl;
-    // // }
-    // //end of skibidi
-
-    // f.close();
-    // //recnos = field_recnos; //assign it to the private variable
-    // t.recnos = recnos;
-    //t.insert_into()
-    //return select(fieldNames);
+    //cout << "start byte (long returned from r2.read(f,i)): " << bytes << endl;
+    while (bytes>0)
+    {
+        //cout << i << "\t" << r << endl; //if I wanna change the look of this output, i need to change the
+        //                         //outs operator for r2, to add spaces between each field
+        //row = r.vectorized_record(fieldindexes);
+        //t.insert_into(row);
+        recnos.push_back(i);
+        i++;
+        bytes = r.read(f, i);
+        //row = r.vectorized_record(fieldindexes);
+        //t.insert_into(row);
+        //cout << "loop byte (long returned from r2.read from the loop): " << bytes <<endl;
+    }
+    f.close();
+    //Table t = *this;
+    //t.recnos = recnos;
     return *this;
 
 }

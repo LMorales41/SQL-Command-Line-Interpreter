@@ -26,16 +26,18 @@ class SQL
         vector<long> select_recnos()
         {
             //cout << "size of this vector is: " << recnos.size() << endl;
-            return recnos;
+            return _recnos;
         }
         Table run_command(string commandstr);
-
-    private:
+        vector<long> _recnos;
         mmap_ss ptree;
+    private:
+        
         vector<string>values;
         vector<string>keys;
         vector<vector<string>> queries;
-        vector<long> recnos;
+        Table _keep_track_table;
+        
 };
 
 

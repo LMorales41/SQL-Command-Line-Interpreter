@@ -20,7 +20,7 @@ bool test_sql(bool debug = false)
   if (debug){
     cout << "testB:: test-sub() entering test_sub" << endl;
   }
-  string str = "make table employee fields  last,       first,         dep,      salary, year";
+  string str = "make table pokemon fields   type,       name,         number,      gen, color";
   SQL sql;
   //sql.command(str);
 

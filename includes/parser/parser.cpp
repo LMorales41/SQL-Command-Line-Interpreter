@@ -224,6 +224,7 @@ void Parser::get_parse_tree()
     // cout << "string: " << strng << endl;
     // cout << "column: " << column << endl;
     // cout << "state: " << state << endl;
+    //cout << 
     switch (state)
     {
       case 1:

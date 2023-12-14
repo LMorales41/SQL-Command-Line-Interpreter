@@ -6,64 +6,66 @@ Table SQL::command(string commandline)
     char s [500];
     strcpy(s, commandline.c_str());
     Parser prsr (s);
+
+    //prsr.get_parse_tree();
     ptree = prsr.parse_tree();
+    // cout << "ptree in command :" << endl;
+    // cout << ptree << endl;
     //ptree.print_lookup();
-    get_keys();
-    // for (int i = 0 ; i < keys.size(); i++)
-    // {
-    //     cout << keys[i] << " ";
-    // }
     string command = "command";
+    // string table = "table_name";
     string moving;
     moving = ptree[command].at(0);
+    // string mysanity = ptree[table].at(0);
+    // cout << "im going to cry" << mysanity << endl;
     return run_command(moving);
     
 
     //return t;
 }
 
-void SQL::get_keys()
-{
-    string check; 
-    //can just be a const this is bad
-
-    vector<string> temp = {"col", "command", "condition", "fields", "table_name", "values", "where"};
-    for (int i = 0; i < temp.size(); i++)
-    {
-        check = temp[i];
-        if (ptree.contains(check))
-        {
-            keys.push_back(check);
-        }
-    }
-}
 
 Table SQL::run_command(string commandstr)
 {
-    string temp, tempop, tempoth;
+    string temp;
     string pkey;
     vector<string>tempv;
     vector<string>tempvi;
+    // cout << "ptree in run command: " << endl;
+    // cout << ptree << endl;
+    // pkey = "table_name";
+    // vector<string> tempp = ptree[pkey];
+    // string tbl_name = tempp[0];
+
+    //cout << "tbl name before anything else: " << tbl_name << endl;
+    //ptree.print_lookup();
+    //string test = "table_name";
+    //cout << ptree[test].at(0) << endl;
     if (commandstr == "make" || commandstr == "create")
     {
         //make table
         //if its a table, we need  a name
         pkey = "table_name"; // my field table name will always have this key
+        
         temp = ptree[pkey].at(0); //shoul only be one line 
+        cout << "in make table: " << temp << endl;
         pkey = "col";
-        if (ptree.contains(pkey)) //not everyone will have more than one arg
-        {
-            tempv = ptree[pkey];
-            Table maket (temp, tempv);
-            return maket;
-        }
-        else  //same thing as the one later 
-        //accounts for no conditions being passed in aka one arg
-        {
-            Table maket (temp);
-            recnos = maket.select_recnos();
-            return maket;
-        }
+        tempv = ptree[pkey];
+        Table maket (temp, tempv);
+        return maket;
+        // if (ptree.contains(pkey)) //not everyone will have more than one arg
+        // {
+        //     tempv = ptree[pkey];
+        //     Table maket (temp, tempv);
+        //     return maket;
+        // }
+        // else  //same thing as the one later 
+        // //accounts for no conditions being passed in aka one arg
+        // {
+        //     Table maket (temp);
+        //     recnos = maket.select_recnos();
+        //     return maket;
+        // }
         // cout << "checking col : " << tempv.size() <<endl;
         // for (int i = 0; i < tempv.size(); i++)
         // {
@@ -110,7 +112,7 @@ Table SQL::run_command(string commandstr)
         {
             star = true;
         }
-
+        //cout << "in select: " << temp << endl;
         Table t (temp);
         
 
@@ -122,12 +124,16 @@ Table SQL::run_command(string commandstr)
             cout << "There is no condition." << endl;
             if (star == true)
             {
-                cout << "i need to change fields" << endl;
-                return t.select_all();
+                //cout << "i need to change fields" << endl;
+                _keep_track_table = t.select_all();
+                _recnos = t.select_recnos();
+                return _keep_track_table;
             }
             else
             {
-                return t.select(tempv);
+                _keep_track_table = t.select(tempv);
+                _recnos = t.select_recnos();
+                return _keep_track_table;
             }
             
         }
@@ -151,8 +157,10 @@ Table SQL::run_command(string commandstr)
         {
             tempv = t.get_fields();
         }
-        
-        return t.select(tempv, tempvi);
+
+        _keep_track_table = t.select(tempv, tempvi);
+        _recnos = t.select_recnos();
+        return _keep_track_table;
         
 
 
