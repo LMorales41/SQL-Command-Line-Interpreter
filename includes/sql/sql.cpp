@@ -9,8 +9,8 @@ Table SQL::command(string commandline)
 
     //prsr.get_parse_tree();
     ptree = prsr.parse_tree();
-    // cout << "ptree in command :" << endl;
-    // cout << ptree << endl;
+    cout << "ptree in command :" << endl;
+    cout << ptree << endl;
     //ptree.print_lookup();
     string command = "command";
     // string table = "table_name";
@@ -31,14 +31,14 @@ Table SQL::run_command(string commandstr)
     string pkey;
     vector<string>tempv;
     vector<string>tempvi;
-    // cout << "ptree in run command: " << endl;
-    // cout << ptree << endl;
+    cout << "ptree in run command: " << endl;
+    cout << ptree << endl;
     // pkey = "table_name";
     // vector<string> tempp = ptree[pkey];
     // string tbl_name = tempp[0];
 
-    //cout << "tbl name before anything else: " << tbl_name << endl;
-    //ptree.print_lookup();
+    // cout << "tbl name before anything else: " << tbl_name << endl;
+    ptree.print_lookup();
     //string test = "table_name";
     //cout << ptree[test].at(0) << endl;
     if (commandstr == "make" || commandstr == "create")
