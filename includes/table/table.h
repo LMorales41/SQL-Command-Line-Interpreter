@@ -35,33 +35,14 @@ public:
         empty = false;
         make_file();
         make_structures();
-        //serial++;
-        // cout << "meanwhile in ctor: " << endl;
-        // for (int i = 0; i < fieldNames.size(); i++)
-        // {
-        //     cout << fieldNames[i] << " ";
-        // }
-        // cout << endl;
-        // cout << fieldMap << endl;
     }
     Table (const string& name)
     {
         this->name = name;
         empty = false;
-        //i had read info return a vectorstr before to fill up the one in the object
-        //fieldNames = read_info();
         read_info();
-        // make_file();
-        // make_structures();
         reindex();
         numRecords = get_numRecords();
-        //serial++;
-        // cout << "in table string only arg ctor: " << endl;
-        // for (int i = 0; i < fieldNames.size();i++)
-        // {
-        //     cout << fieldNames[i] << " ";
-        // }
-        // cout << endl;
     }
     ~Table(){}
 

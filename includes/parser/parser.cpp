@@ -4,15 +4,15 @@ int Parser::_table[MAX_ROWS][MAX_COLUMNS];
 
 Parser::Parser(char* s)
 {
+  make_map();
+  make_table();
+
   tokenize(s);
 
-  make_map();
 
-  make_table();
 
   get_parse_tree();
 
-  
 }
 
 void Parser::set_string(char* s)
@@ -36,12 +36,12 @@ vector<string> Parser::tokenize(char* s)
   while(stk.more())
   {
     //process token here...
-    //cout<<setw(10)<<t.type_string()<<setw(10)<<t<<endl;
+    //cout<<setw(10)<<t.token_str()<<setw(10)<<t.get_string()<<endl;
     if ( t.token_str() == "ALFA" || t.get_string() != "," || t.token_str() != "SPACES")
     { 
       if (t.token_str() == "PUNC")
       {
-        if (t.get_string() == "(" || t.get_string() == ")")
+        if (t.get_string()[0] == '(' || t.get_string()[0] == ')')
         {
           temp.push_back(t.get_string());
         }
@@ -56,6 +56,7 @@ vector<string> Parser::tokenize(char* s)
     {
       
     }
+    
 
     t = Token();
     stk>>t;
@@ -73,18 +74,26 @@ vector<string> Parser::tokenize(char* s)
     else
     {
       removeq = temp[i];
+      // if (removeq[0] == '"')
+      // {
+      //   removeq = removeq.substr(1);
+      // }
+
       if (removeq[0] == '"')
       {
-        removeq = removeq.substr(1);
+        //cout << "found quotes" <<removeq << endl;
+        removeq = removeQuotes(removeq);
       }
       input_q.push_back(removeq);
     }
   }
+  // cout << "my sentence: "<< endl;
   // for (int i = 0; i < input_q.size(); i++)
   // {
-  //   cout << input_q[i] << endl;
+  //   cout << input_q[i] << ";";
 
   // }
+  cout << endl;
   return temp; //raw unedited
 }
 
@@ -188,30 +197,26 @@ void Parser::make_table() //add this back in if it doesnt work -> (int _table[][
 
 void Parser::get_parse_tree()
 {
-  //ptree.clear();
   string strng;
   int state = 0;
   int column;
-  string symbol = "symbol";
   for (int i = 0; i < input_q.size(); i++)
   {
     strng = input_q[i];
     if (!keywords.contains(strng))
     {
-      column = keywords.get(symbol);
+      column = keywords.get("symbol");
     }
     else 
     {
       column = keywords.get(strng);
     }
-
     state = _table[state][column];
 
     //to bugfix and build
     // cout << "string: " << strng << endl;
     // cout << "column: " << column << endl;
     // cout << "state: " << state << endl;
-    //cout << 
     switch (state)
     {
       case 1:
@@ -259,7 +264,6 @@ void Parser::get_parse_tree()
       case 24:
         ptree.insert("values", strng);
         break;
-
       default:
         break;
     }
@@ -269,4 +273,11 @@ void Parser::get_parse_tree()
 mmap_ss Parser::parse_tree()
 {
   return ptree;
+}
+
+
+
+string Parser::removeQuotes(string& original) 
+{
+  return original.substr(1, original.size() - 2);
 }

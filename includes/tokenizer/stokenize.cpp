@@ -93,11 +93,11 @@ void STokenizer::make_table2(int _table[][MAX_COLUMNS])
     mark_cells(1, _table, ALFA, 1);
     mark_cells(2, _table, DIGITS, 2);
     mark_cells(0, _table, PUNC, 3);
-    mark_cells(3, _table, PUNC, 3);
+    //mark_cells(3, _table, PUNC, 3);
     mark_cells(0, _table, SPACES, 4);
     mark_cells(4, _table, SPACES, 4);
     mark_cells (0, _table, OTHER, 10 );
-    mark_cells (10, _table, OTHER, 10);
+    //mark_cells (10, _table, OTHER, 10);
     mark_cells(0, _table, OPERATORS, 20);
     mark_cells(20, _table, OPERATORS, 20);
     char quotes = '"';
@@ -111,7 +111,7 @@ void STokenizer::make_table2(int _table[][MAX_COLUMNS])
     mark_cells(30, _table, DIGITS, 30);
     mark_cell (30, _table, singlequote, 30);
     mark_cell (30, _table, hyphen, 30);
-    // mark_cell (31, _table, quotes, 30);
+    mark_cell (30, _table, quotes, 31);
 
 
 
