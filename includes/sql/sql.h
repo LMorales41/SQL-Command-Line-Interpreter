@@ -3,7 +3,6 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
-#include <string.h>
 #include "../table/table.h"
 #include "../table/typedefs.h"
 #include "../parser/parser.h"
@@ -33,6 +32,7 @@ class SQL
         vector<long> _recnos;
         
     private:
+        Parser prsr;
         mmap_ss ptree;
         vector<string>values;
         vector<string>keys;

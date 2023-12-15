@@ -118,12 +118,7 @@ void Table::insert_into(vectorstr collection)
     string _bfilename = name + ".bin";
     open_fileRW(f, _bfilename.c_str());
     r = FileRecord(collection);
-    // cout << "the vector i pass into insert_into" << endl;
-    // cout << "the size of it: " << collection.size() << endl;
-    // print_vector(collection);
-    //cout << "writing this vector" << endl;
-    // cout << "table name: " << name << endl;
-    // cout << "is writing into the following file: " << _bfilename << endl;
+
     _recno = r.write(f);
     //recnos.push_back(_recno);
     // cout << "recnos after inserting: " << endl;
@@ -137,13 +132,13 @@ void Table::insert_into(vectorstr collection)
     
 
     ///////its here
-    cout << "I cannot have more fields than this: " <<fieldNames.size() << endl;
-    cout << "what am i inserting into my collection: " << endl;
+    // cout << "I cannot have more fields than this: " <<fieldNames.size() << endl;
+    // cout << "what am i inserting into my collection: " << endl;
     for (int i = 0; i < collection.size(); i++)
     {
         //MPair <string, long> temp (collection[i], _recno); <- being inserted
         
-        cout << "key: " <<collection[i] << " value:  " << _recno << endl;
+        //cout << "key: " <<collection[i] << " value:  " << _recno << endl;
         indices[i].insert(collection[i], _recno);
     }
 

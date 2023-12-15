@@ -4,30 +4,14 @@ int Parser::_table[MAX_ROWS][MAX_COLUMNS];
 
 Parser::Parser(char* s)
 {
-  //cout << "tokenize" << endl;
   tokenize(s);
-  //cout << "make map" << endl;
+
   make_map();
-  //cout << "make table" << endl;
+
   make_table();
-  //cout << "getptree" << endl;
-  ptree.clear();
+
   get_parse_tree();
-  //ptree.print_lookup();
-  //cout << "not this?" << endl;
-  // cout << "my sentence: " << endl;
-  // for (int i = 0; i < input_q.size(); i++)
-  // {
-  //   cout << input_q[i] << ",";
-  // }
-  // cout << endl;
-  // cout << "my ptree: " << endl;
-  // cout << ptree << endl;
-  // for (int i = 0; i < tokenized.size(); i++)
-  // {
-  //   cout << tokenized[i] << " ";
-  // }
-  // cout << endl;
+
   
 }
 
@@ -224,7 +208,7 @@ void Parser::get_parse_tree()
     state = _table[state][column];
 
     //to bugfix and build
-    cout << "string: " << strng << endl;
+    // cout << "string: " << strng << endl;
     // cout << "column: " << column << endl;
     // cout << "state: " << state << endl;
     //cout << 

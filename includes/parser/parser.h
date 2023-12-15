@@ -17,7 +17,11 @@ using namespace std;
 class Parser
 {
     public:
-        Parser(){}
+        Parser()
+        {
+            make_map();
+            make_table();
+        }
         Parser(char* s);
         vector<string> tokenize(char* s); // returns the non edited string vector 
         void make_table();

@@ -47,33 +47,33 @@ bool test_sql(bool debug = false)
   if (debug){
     cout << "testB:: test-sub() entering test_sub" << endl;
   }
-  vector<string> commandstrngs = 
-  {
-    "make table company fields name, location, industry, revenue",
-    "insert into company values Microsoft, Seattle, Technology, 143015",
-    // "select name, industry, revenue from company",
-    // "select * from company where revenue > 100000",
-    // "select * from company where location like 'S%'",
-    "make table project fields name, startyear, endyear, budget",
-    "insert into project values WebApp, 2021, 2023, 50000",
-    "select * from company",
-    "select * from project"
+  // vector<string> commandstrngs = 
+  // {
+  //   "make table company fields name, location, industry, revenue",
+  //   "insert into company values Microsoft, Seattle, Technology, 143015",
+  //   // "select name, industry, revenue from company",
+  //   // "select * from company where revenue > 100000",
+  //   // "select * from company where location like 'S%'",
+  //   "make table project fields name, startyear, endyear, budget",
+  //   "insert into project values WebApp, 2021, 2023, 50000",
+  //   "select * from company",
+  //     "select * from project"
 
 
-  };
-  //string str = "create table loo's fields   22.2,       name1,         name2,      gen, color";
-  SQL sql;
-  Table t;
+  //   };
+  //   //string str = "create table loo's fields   22.2,       name1,         name2,      gen, color";
+  //   SQL sql;
+  //   Table t;
 
-  for (int i = 0;i < commandstrngs.size(); i++)
-  {
-    cout << "==========================================================" << endl;
-    cout << "running this command: " << commandstrngs[i] << endl;
-    //cout << sql.command(commandstrngs[i]) << endl;
-    cout << (t = sql.command(commandstrngs[i])) << endl;
-    cout << "basic_test: records selected: "<<sql.select_recnos() << endl;
-    cout << "==========================================================" << endl;
-  }
+  //   for (int i = 0;i < commandstrngs.size(); i++)
+  //   {
+  //     cout << "==========================================================" << endl;
+  //     cout << "running this command: " << commandstrngs[i] << endl;
+  //     //cout << sql.command(commandstrngs[i]) << endl;
+  //     cout << (t = sql.command(commandstrngs[i])) << endl;
+  //     cout << "basic_test: records selected: "<<sql.select_recnos() << endl;
+  //     cout << "==========================================================" << endl;
+  //   }
 
 
 

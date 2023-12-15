@@ -5,7 +5,8 @@ Table SQL::command(string commandline)
     //Table t;
     char s [500];
     strcpy(s, commandline.c_str());
-    Parser prsr (s);
+    // Parser prsr (s);
+    prsr.set_string(s);
     //cout << "issue with table?" << endl;
     //prsr.get_parse_tree();
     // ptree.clear();
@@ -41,9 +42,9 @@ Table SQL::run_command(string commandstr)
     // cout << ptree << endl;
     // cout << "using lookup:" << endl;
     // ptree.print_lookup();
-    string tbl = "table_name";
-    string tbl_name = ptree[tbl][0];
-    //cout << "tbl name before anything else: " << tbl_name << endl;
+    // string tbl = "table_name";
+    // string tbl_name = ptree[tbl][0];
+    // cout << "tbl name before anything else: " << tbl_name << endl;
 
 
 
@@ -54,7 +55,7 @@ Table SQL::run_command(string commandstr)
         pkey = "table_name"; // my field table name will always have this key
         
         temp = ptree[pkey].at(0); //shoul only be one line 
-        //cout << "in make table: " << temp << endl;
+        cout << "in make table: " << temp << endl;
         pkey = "col";
         tempv = ptree[pkey];
         Table maket (temp, tempv);
@@ -82,9 +83,9 @@ Table SQL::run_command(string commandstr)
 
         //now call insert_into
         t.insert_into(tempv);
-        
+        _keep_track_table = t;
 
-        return t;
+        return _keep_track_table;
     }
     else if (commandstr == "select")
     {
@@ -92,7 +93,7 @@ Table SQL::run_command(string commandstr)
         pkey = "table_name"; // my field table name will always have this key
         // cout << "ptree in command call: " << endl;
         // cout << ptree << endl;
-        temp = (ptree[pkey]).at(0); //shoul only be one line 
+        temp = ptree[pkey].at(0); //shoul only be one line 
         // cout << "aaa: " <<temp << endl;
         pkey = "fields";
         tempv = ptree[pkey]; //i have vector of fields
