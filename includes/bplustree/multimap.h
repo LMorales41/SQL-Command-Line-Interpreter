@@ -142,8 +142,7 @@ public:
 
     MMap()
     {
-        
-    }
+    }   
 
 //  Iterators
     Iterator begin()
@@ -184,6 +183,7 @@ public:
     {
         MPair<K, V> inserting_this(k, v); //fills in the mpair to insert
         //cout <<  "here?" << endl;
+        //cout << "mmap insert func" << endl;
         mmap.insert(inserting_this);
         return;
     }

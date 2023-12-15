@@ -15,24 +15,49 @@ bool test_stub(bool debug = false)
   return true;
 }
 
+bool test_tree(bool debug = false)
+{
+  if (debug){
+    cout << "testB:: test-sub() entering test_sub" << endl;
+  }
+
+  BPlusTree<int> bpt;
+  bpt.insert(1);
+  bpt.insert(2);
+  bpt.insert(3);
+  cout << bpt << endl;
+  BPlusTree<int>::Iterator itr = bpt.begin();
+
+
+  cout << "testing iterators for base bpt: " << endl;
+  cout << *itr << endl;
+  itr++;
+  cout << *itr << endl;
+  itr++;
+  cout << *itr << endl;
+
+  cout << "testing the copy now: " << endl;
+  BPlusTree<int> bptree;
+  bptree.copy_tree(bpt);
+  return true;
+}
+
 bool test_sql(bool debug = false)
 {
   if (debug){
     cout << "testB:: test-sub() entering test_sub" << endl;
   }
   vector<string> commandstrngs = 
-  
-  
   {
     "make table company fields name, location, industry, revenue",
     "insert into company values Microsoft, Seattle, Technology, 143015",
-    // "select * from company",
     // "select name, industry, revenue from company",
     // "select * from company where revenue > 100000",
     // "select * from company where location like 'S%'",
     "make table project fields name, startyear, endyear, budget",
-    "insert into project values WebApp, '2021', '2023', 50000",
-    // "select * from project where budget between 40000 and 60000"
+    "insert into project values WebApp, 2021, 2023, 50000",
+    "select * from company",
+    "select * from project"
 
 
   };
@@ -51,6 +76,10 @@ bool test_sql(bool debug = false)
   }
 
 
+
+    
+  
+
   return true;
 }
 
@@ -60,6 +89,14 @@ TEST(TEST_STUB, TestStub) {
 
   EXPECT_EQ(1, test_stub(false));
 }
+
+// TEST(TEST_TREE, TestTree) {
+  
+//   //EXPECT_EQ(0, <your individual test functions are called here>);
+
+//   EXPECT_EQ(1, test_tree(false));
+// }
+
 
 TEST(TEST_SQL, TestSql) {
   

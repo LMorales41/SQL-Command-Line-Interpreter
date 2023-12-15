@@ -159,7 +159,10 @@ public:
 
                                                 //  (delete all nodes etc.)
     void copy_tree(const BPlusTree<T>& other);      //copy other into this object
-    void copy_tree(const BPlusTree<T>& other, BPlusTree<T>*& last_node);
+    void copy_tree(const BPlusTree<T>& other, BPlusTree<T>*& last_node)
+    {
+
+    }
 
     bool contains(const T& entry);              //true if entry can be found in
                                                 //                  the array
@@ -200,7 +203,7 @@ public:
             //cout << "gets ere" << endl;
 
             T* temp = find_ptr(key);
-            BPlusTree <T>* bagel = new BPlusTree<T>;
+            BPlusTree <T>* bagel = new BPlusTree<T>();
             bagel->insert(*temp);
             //cout << *temp << endl;
             Iterator found(bagel);
@@ -314,11 +317,12 @@ public:
         
         cout << *get_smallest_node() << endl;
     }
+    bool dups_ok;
 private:
     static const int MINIMUM = 1;
     static const int MAXIMUM = 2 * MINIMUM;
 
-    bool dups_ok;                               //true if duplicate keys may be
+                                   //true if duplicate keys may be
     int data_count;                             //number of data elements
     T data[MAXIMUM + 1];                        //holds the keys
     int child_count;                            //number of children
@@ -591,11 +595,11 @@ void BPlusTree<T>::print_tree(int level, ostream& outs) const
 }
 
 template<typename T>
-BPlusTree<T>::BPlusTree(bool dups)
+BPlusTree<T>::BPlusTree(bool dups_ok)
 {
     T temp;
     data[0] = temp;
-    dups = true;
+    this->dups_ok = dups_ok;
     data_count = 0;
     child_count = 0;
     next = nullptr;
@@ -654,7 +658,7 @@ void BPlusTree<T>::insert(const T& entry)
     if (data_count > MAXIMUM) //only enters when root is in excess
     {
         //cout << "hihigh" << endl;
-        BPlusTree<T>* temp  =  new BPlusTree<T>;
+        BPlusTree<T>* temp  =  new BPlusTree<T>();
         copy_array(temp->data, data, temp->data_count, data_count);
         copy_array(temp->subset, subset, temp->child_count, child_count);
         //temp->next = next;
@@ -740,10 +744,10 @@ void BPlusTree<T>::copy_tree(const BPlusTree<T>& other)
     //cout << "orig data[0]: " << other.data[0] << endl;
     copy_array(data, other.data, data_count, other.data_count);
     child_count = other.child_count;
-
+    dups_ok = other.dups_ok;
     for (int i = 0; i < other.child_count; i++)
     {
-        subset[i] = new BPlusTree <T>;
+        subset[i] = new BPlusTree <T>();
         subset[i]->copy_tree(*(other.subset[i]));
     }
 
@@ -864,10 +868,10 @@ T* BPlusTree<T>::find_ptr(const T& entry)
 {
     T temp;
     int here = first_ge(data, data_count, entry); //index to check
-    bool found = here <= data_count && data[here] == entry;
+    bool found = here < data_count && data[here] == entry;
     //cout << "here in find:" << here << endl;
     //cout << " data: " << data[here] << " ";
-    if ( is_leaf() && here <= data_count ) 
+    if ( is_leaf() && here < data_count ) 
     {
         //cout << "recognized as a leaf" << endl;
         //cout << data[here] << endl;
@@ -966,6 +970,7 @@ string BPlusTree<T>::in_order()
 template<typename T>
 void BPlusTree<T>::loose_insert(const T& entry)
 {
+    
     //cout << "hi" << endl;
     int index =  first_ge(data, data_count, entry);
     bool found = index < data_count && data[index] == entry;
@@ -976,12 +981,14 @@ void BPlusTree<T>::loose_insert(const T& entry)
 
     if (is_leaf())
     {
+        //cout << "entry: " << entry << endl;
         if (found == true && data[index] == entry)
         //if found, simply override <- dont do 
         {
-            data[index] = data[index]+ entry;
+            data[index] = data[index] + entry;
             return;
         }
+
         //actual value, insert here
         //cout << "here" << endl;
         ordered_insert(data, data_count, entry);

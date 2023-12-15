@@ -6,9 +6,11 @@ Table SQL::command(string commandline)
     char s [500];
     strcpy(s, commandline.c_str());
     Parser prsr (s);
-
+    //cout << "issue with table?" << endl;
     //prsr.get_parse_tree();
+    // ptree.clear();
     ptree = prsr.parse_tree();
+    //cout << "issue here?" << endl;
     // cout << "ptree in command :" << endl;
     // cout << ptree << endl;
     //ptree.print_lookup();
@@ -16,9 +18,12 @@ Table SQL::command(string commandline)
     // string table = "table_name";
     string moving;
     moving = ptree[command].at(0);
+    //cout << "after [] .at" << endl;
+    // cout << "N STUFF " << moving << endl;
     // string mysanity = ptree[table].at(0);
     // cout << "im going to cry" << mysanity << endl;
     _keep_track_table = run_command(moving);
+    //cout << "after run command" << endl;
    // ptree.clear();
     return _keep_track_table;
 
@@ -34,11 +39,11 @@ Table SQL::run_command(string commandstr)
     vector<string>tempvi;
     // cout << "ptree in run command: " << endl;
     // cout << ptree << endl;
-
-    //ptree.print_lookup();
-    // string tbl = "table_name";
-    // string tbl_name = ptree[tbl][0];
-    // cout << "tbl name before anything else: " << tbl_name << endl;
+    // cout << "using lookup:" << endl;
+    // ptree.print_lookup();
+    string tbl = "table_name";
+    string tbl_name = ptree[tbl][0];
+    //cout << "tbl name before anything else: " << tbl_name << endl;
 
 
 
@@ -54,35 +59,13 @@ Table SQL::run_command(string commandstr)
         tempv = ptree[pkey];
         Table maket (temp, tempv);
         return maket;
-        // if (ptree.contains(pkey)) //not everyone will have more than one arg
-        // {
-        //     tempv = ptree[pkey];
-        //     Table maket (temp, tempv);
-        //     return maket;
-        // }
-        // else  //same thing as the one later 
-        // //accounts for no conditions being passed in aka one arg
-        // {
-        //     Table maket (temp);
-        //     recnos = maket.select_recnos();
-        //     return maket;
-        // }
-        // cout << "checking col : " << tempv.size() <<endl;
-        // for (int i = 0; i < tempv.size(); i++)
-        // {
-        //     cout << tempv[i] << ",";
-        // }
-        // cout << endl;
-        //now I have all things necessary for make command
-        //  - the command, the table name, and the vector of fields
-        // now i build it
 
 
     }
     else if (commandstr == "insert")
     {
-        //Table t;
         pkey = "table_name"; // my field table name will always have this key
+        //cout << "insert at is not constructed properly" << endl;
         temp = ptree[pkey].at(0); //shoul only be one line 
         Table t(temp);
         //insert into 
@@ -99,17 +82,22 @@ Table SQL::run_command(string commandstr)
 
         //now call insert_into
         t.insert_into(tempv);
-        _keep_track_table = t;
-        return _keep_track_table;
+        
+
+        return t;
     }
     else if (commandstr == "select")
     {
         //select 
         pkey = "table_name"; // my field table name will always have this key
-        temp = ptree[pkey].at(0); //shoul only be one line 
-        
+        // cout << "ptree in command call: " << endl;
+        // cout << ptree << endl;
+        temp = (ptree[pkey]).at(0); //shoul only be one line 
+        // cout << "aaa: " <<temp << endl;
         pkey = "fields";
         tempv = ptree[pkey]; //i have vector of fields
+        // cout << "wtf: " << endl;
+        // cout << tempv.at(0) << endl;
         bool star = false;
         if (tempv[0] == "*")
         {
@@ -118,7 +106,11 @@ Table SQL::run_command(string commandstr)
         //cout << "in select: " << temp << endl;
         Table t (temp);
         
-
+        // get into select
+        // Table (temp);
+        // call a select depending on no conditons/conditions
+        // t.select(pass something in)
+        // my priv table = t.select(pass something in)
 
         //not all selects will have conditions
         pkey = "condition"; 

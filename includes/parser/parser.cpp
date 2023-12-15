@@ -11,6 +11,7 @@ Parser::Parser(char* s)
   //cout << "make table" << endl;
   make_table();
   //cout << "getptree" << endl;
+  ptree.clear();
   get_parse_tree();
   //ptree.print_lookup();
   //cout << "not this?" << endl;
@@ -203,15 +204,17 @@ void Parser::make_table() //add this back in if it doesnt work -> (int _table[][
 
 void Parser::get_parse_tree()
 {
+  //ptree.clear();
   string strng;
   int state = 0;
   int column;
+  string symbol = "symbol";
   for (int i = 0; i < input_q.size(); i++)
   {
     strng = input_q[i];
     if (!keywords.contains(strng))
     {
-      column = keywords.get("symbol");
+      column = keywords.get(symbol);
     }
     else 
     {
@@ -221,7 +224,7 @@ void Parser::get_parse_tree()
     state = _table[state][column];
 
     //to bugfix and build
-    // cout << "string: " << strng << endl;
+    cout << "string: " << strng << endl;
     // cout << "column: " << column << endl;
     // cout << "state: " << state << endl;
     //cout << 
@@ -271,6 +274,7 @@ void Parser::get_parse_tree()
         break;
       case 24:
         ptree.insert("values", strng);
+        break;
 
       default:
         break;

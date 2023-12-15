@@ -134,9 +134,16 @@ void Table::insert_into(vectorstr collection)
     //     cout << recnos[i] << " ";
     // }
     //cout << endl;
+    
+
+    ///////its here
+    cout << "I cannot have more fields than this: " <<fieldNames.size() << endl;
+    cout << "what am i inserting into my collection: " << endl;
     for (int i = 0; i < collection.size(); i++)
     {
         //MPair <string, long> temp (collection[i], _recno); <- being inserted
+        
+        cout << "key: " <<collection[i] << " value:  " << _recno << endl;
         indices[i].insert(collection[i], _recno);
     }
 
@@ -147,21 +154,32 @@ void Table::insert_into(vectorstr collection)
 
 Table Table::select_all()
 {
-    
+    serial++;
+    vector<int> fieldindexes;
+    string holds;
+    int insert_index;
+    for (int i = 0; i < fieldNames.size(); i++)
+    {
+        holds = fieldNames[i];
+        insert_index = fieldMap.get(holds);
+        fieldindexes.push_back(insert_index);
+    }
+    string newname = name + to_string(serial);
+    Table t(newname, fieldNames);
     string orig_bfilename = name + ".bin";
     FileRecord r;
     fstream f;
     open_fileRW(f, orig_bfilename.c_str());
     int i = 0;
     long bytes = r.read(f, i); //empty envelop to be filled by the FileRecord object
-
+    vectorstr row;
     //cout << "start byte (long returned from r2.read(f,i)): " << bytes << endl;
     while (bytes>0)
     {
         //cout << i << "\t" << r << endl; //if I wanna change the look of this output, i need to change the
         //                         //outs operator for r2, to add spaces between each field
-        //row = r.vectorized_record(fieldindexes);
-        //t.insert_into(row);
+        row = r.vectorized_record(fieldindexes);
+        t.insert_into(row);
         recnos.push_back(i);
         i++;
         bytes = r.read(f, i);
@@ -170,9 +188,8 @@ Table Table::select_all()
         //cout << "loop byte (long returned from r2.read from the loop): " << bytes <<endl;
     }
     f.close();
-    //Table t = *this;
     //t.recnos = recnos;
-    return *this;
+    return t;
 
 }
 

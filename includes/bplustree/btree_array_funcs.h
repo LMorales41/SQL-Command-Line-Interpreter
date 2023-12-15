@@ -234,6 +234,8 @@ void swap(T& a, T& b)
 template <class T>
 int first_ge(const T data[ ], int n, const T& entry)
 {
+    //cout << "entry: " << endl;
+    //cout << "entry: " << entry <<endl;
     //check entry
     for (int i = 0; i < n; i++)
     {

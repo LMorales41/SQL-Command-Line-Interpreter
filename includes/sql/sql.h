@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <string.h>
 #include "../table/table.h"
 #include "../table/typedefs.h"
 #include "../parser/parser.h"

@@ -52,10 +52,7 @@ struct Pair
     friend Pair<K, V> operator + (const Pair<K, V>& lhs, const Pair<K, V>& rhs)
     {
         Pair<K, V> temp;
-        temp.key = lhs.key;
-        temp.value = lhs.value;
-        temp.value += rhs.value;
-        return temp;
+        return rhs;
     }
 };
 
@@ -154,6 +151,7 @@ public:
 //  Modifiers
     void insert(const K& k, const V& v)
     {
+        //cout << "map insert" << endl;
         map.insert(Pair<K, V> (k, v));
         return;
     }
