@@ -1,0 +1,4 @@
+isbn
+title
+author
+price

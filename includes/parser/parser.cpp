@@ -36,7 +36,7 @@ vector<string> Parser::tokenize(char* s)
   while(stk.more())
   {
     //process token here...
-    cout<<setw(10)<<t.token_str()<<setw(10)<<t.get_string()<<endl;
+    //cout<<setw(10)<<t.token_str()<<setw(10)<<t.get_string()<<endl;
     if ( t.token_str() == "ALFA" || t.get_string() != "," || t.token_str() != "SPACES")
     { 
       if (t.token_str() == "PUNC")
@@ -87,12 +87,12 @@ vector<string> Parser::tokenize(char* s)
       input_q.push_back(removeq);
     }
   }
-  cout << "my sentence: "<< endl;
-  for (int i = 0; i < input_q.size(); i++)
-  {
-    cout << input_q[i] << ";";
-  }
-  cout << endl;
+  // cout << "my sentence: "<< endl;
+  // for (int i = 0; i < input_q.size(); i++)
+  // {
+  //   cout << input_q[i] << ";";
+  // }
+  // cout << endl;
   return temp; //raw unedited
 }
 
@@ -182,8 +182,8 @@ void Parser::make_table() //add this back in if it doesnt work -> (int _table[][
     //insert
     mark_success(_table, 24); //insert into student values John 
     mark_cell(0, _table, INSERT, 20); //command $insert
-    mark_cell(20, _table, INTO, 21); //into -useless $into
-    mark_cell (21, _table, SYMBOL, 22); //table_name $student
+    mark_cell(20, _table, INTO, 20); //into -useless $into
+    mark_cell (20, _table, SYMBOL, 22); //table_name $student
     mark_cell (22, _table, VALUES, 23); //values -useless $values
     mark_cell (23, _table, SYMBOL, 24); //valuenames $John, Smith, 23
     mark_cell (24, _table, SYMBOL, 24); //other valuenames $cs, Pasadena

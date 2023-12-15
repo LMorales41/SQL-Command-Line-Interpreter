@@ -57,18 +57,30 @@ bool test_sql(bool debug = false)
   {
     "create table students fields id name age",
     "make table books fields isbn title author price",
-    "create table orders fields \"order%id\" quantity",
-    "make table employees fields \"employee-id\" name salary"
+    "create table orders fields \"order_id\" quantity",
+    "make table employees fields \"employee_id\" name salary"
   };
-  students = sql.command(commandlines[0]);
-  books = sql.command(commandlines[1]);
-  orders = sql.command(commandlines[2]);
-  employees = sql.command(commandlines[3]);
+  for (int i = 0; i < commandlines.size(); i++)
+  {
+    holding[i] = sql.command(commandlines[i]);
+  }
 
-  cout << students << endl;
-  cout << books << endl;
-  cout << orders << endl;
-  cout << employees << endl;
+  vectorstr insertlines = 
+  {
+    "insert employees values 101 \"John Doe\" 50000",
+    "insert into employees values 102 \"Jane Smith\" 60000",
+    "insert into employees values 103 \"Bob Johnson\" 55000",
+    "insert into employees values 104 \"Alice Williams\" 70000"
+  };
+  for (int i =0 ; i < insertlines.size(); i++)
+  {
+    sql.command(insertlines[i]);
+  }
+
+  for (int i =0 ; i < holding.size(); i++)
+  {
+    cout << holding[i] << endl;
+  }
   return true;
 }
 
