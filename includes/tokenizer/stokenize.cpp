@@ -104,17 +104,25 @@ void STokenizer::make_table2(int _table[][MAX_COLUMNS])
     char singlequote = '\'';
     char period = '.';
     char hyphen = '-';
+    char uhyphen = '_';
     mark_cell (0, _table, quotes, 30);
-    mark_cells (30, _table, ALFA, 30);
-    mark_cells(30, _table, SPACES, 30);
-    mark_cell (30, _table, period, 30);
-    mark_cells(30, _table, DIGITS, 30);
-    mark_cell (30, _table, singlequote, 30);
-    mark_cell (30, _table, hyphen, 30);
+    mark_cells (30, _table, 1, 21, 30);
+    mark_cells (30, _table, 23, 91, 30);
+    mark_cells (30, _table, 93, 255, 30);
+    //mark_cells(30, _table, 0, 255, 30);
+
+
+    //works
+    // mark_cells (30, _table, ALFA, 30);
+    // mark_cells(30, _table, SPACES, 30);
+    // mark_cell (30, _table, period, 30);
+    // mark_cells(30, _table, DIGITS, 30);
+    // mark_cell (30, _table, singlequote, 30);
+    // mark_cell (30, _table, hyphen, 30);
+    // mark_cells (30, _table, PUNC, 30);
+    // mark_cells (30, _table, OTHER, 30);
+    // mark_cell (30, _table, uhyphen, 30);
     mark_cell (30, _table, quotes, 31);
-
-
-
 
 }
 void STokenizer::make_table(int _table[][MAX_COLUMNS])

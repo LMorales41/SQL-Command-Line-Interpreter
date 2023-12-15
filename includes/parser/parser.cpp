@@ -36,7 +36,7 @@ vector<string> Parser::tokenize(char* s)
   while(stk.more())
   {
     //process token here...
-    //cout<<setw(10)<<t.token_str()<<setw(10)<<t.get_string()<<endl;
+    cout<<setw(10)<<t.token_str()<<setw(10)<<t.get_string()<<endl;
     if ( t.token_str() == "ALFA" || t.get_string() != "," || t.token_str() != "SPACES")
     { 
       if (t.token_str() == "PUNC")
@@ -87,12 +87,11 @@ vector<string> Parser::tokenize(char* s)
       input_q.push_back(removeq);
     }
   }
-  // cout << "my sentence: "<< endl;
-  // for (int i = 0; i < input_q.size(); i++)
-  // {
-  //   cout << input_q[i] << ";";
-
-  // }
+  cout << "my sentence: "<< endl;
+  for (int i = 0; i < input_q.size(); i++)
+  {
+    cout << input_q[i] << ";";
+  }
   cout << endl;
   return temp; //raw unedited
 }
