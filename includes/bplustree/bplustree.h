@@ -159,10 +159,7 @@ public:
 
                                                 //  (delete all nodes etc.)
     void copy_tree(const BPlusTree<T>& other);      //copy other into this object
-    void copy_tree(const BPlusTree<T>& other, BPlusTree<T>*& last_node)
-    {
-
-    }
+    void copy_tree(const BPlusTree<T>& other, BPlusTree<T>*& last_node);
 
     bool contains(const T& entry);              //true if entry can be found in
                                                 //                  the array
@@ -463,7 +460,7 @@ T& BPlusTree<T>::get_existing(const T& entry)
     }
     else if (here <= data_count && is_leaf() == false)
     {
-        return *(subset[here+found]->find_ptr(entry));
+        return (subset[here+found]->get_existing(entry)); //changed this still working
         /*if (data[here] != entry])
         {
             return subset[here]->find(entry);
@@ -742,19 +739,44 @@ template<typename T>
 void BPlusTree<T>::copy_tree(const BPlusTree<T>& other)
 {
     //cout << "orig data[0]: " << other.data[0] << endl;
-    copy_array(data, other.data, data_count, other.data_count);
-    child_count = other.child_count;
-    dups_ok = other.dups_ok;
-    for (int i = 0; i < other.child_count; i++)
-    {
-        subset[i] = new BPlusTree <T>();
-        subset[i]->copy_tree(*(other.subset[i]));
-    }
+    //move into other copy
+    BPlusTree<T> *temp = nullptr;
+    copy_tree (other, temp);
 
 
 }      
 //copy other into this object
 
+template <typename T>
+void BPlusTree<T>::copy_tree(const BPlusTree<T>& other, BPlusTree<T>*& last_node)
+{
+    copy_array(data, other.data, data_count, other.data_count); //goes uppy here
+    if (is_leaf()) //next only exists at leaves
+    {
+        if (last_node != nullptr) 
+        { //only if there are pointers to copy :D
+            last_node->next = this;
+            last_node = this;
+        }
+        ///DONT RETURN FROM HERe - > needs to copy leaves too
+        else
+        {
+            last_node = this; //this was causing seg faults
+        }
+    }
+    // else 
+    // { bad placement
+    //     last_node = this;
+    // }
+    
+    dups_ok = other.dups_ok; //ehh
+    for (int i = 0; i < other.child_count; i++)
+    {
+        subset[i] = new BPlusTree <T>();
+        subset[i]->copy_tree(*(other.subset[i]), last_node); //called it wrong last time
+    }
+    child_count = other.child_count; //this at end or else breaky breaky
+}
 
 template<typename T>
 bool BPlusTree<T>::contains(const T& entry) const
