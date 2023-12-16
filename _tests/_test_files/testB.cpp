@@ -22,23 +22,59 @@ bool test_tree(bool debug = false)
   }
 
   BPlusTree<int> bpt;
-  bpt.insert(1);
-  bpt.insert(2);
-  bpt.insert(3);
-  cout << bpt << endl;
-  BPlusTree<int>::Iterator itr = bpt.begin();
-
-
-  cout << "testing iterators for base bpt: " << endl;
-  cout << *itr << endl;
-  itr++;
-  cout << *itr << endl;
-  itr++;
-  cout << *itr << endl;
-
-  cout << "testing the copy now: " << endl;
   BPlusTree<int> bptree;
-  bptree.copy_tree(bpt);
+  for (int i = 0; i < 100; i++)
+  {
+
+    // if (i == 10)
+    // {
+    //   bpt.insert(i);
+    // }
+    // if (i == 50)
+    // {
+    //   bpt.insert(i);
+    // }
+    bpt.insert(i);
+  }
+  cout << bpt << endl;
+  cout << bpt.contains(2) << endl;
+  cout << bpt.contains(1) << endl;
+  cout << bpt.contains(4) << endl;
+  cout << (bpt.get_existing(4)) << endl;
+  cout << "what does the fox say: " <<(bpt.get_existing(100)) << endl;
+  cout << "on something that exists: " << *(bpt.find_ptr(20)) << endl;
+  cout << "about as real as my girlfriend: " << bpt.find_ptr(101) << endl;
+
+  cout << "real as taxes: " << *bpt.find(69) << endl;
+
+  cout << "amount of people that love me: ";
+  bpt.find(-1);
+
+  cout << bpt << endl;
+
+
+  // bptree = bpt;
+  // cout << bptree << endl;
+  //this works
+  // BPlusTree<int>::Iterator itr = bpt.begin();
+
+
+  // cout << "testing iterators for base bpt: " << endl;
+  // cout << *itr << endl;
+  // itr++;
+  // cout << *itr << endl;
+  // itr++;
+  // cout << *itr << endl;
+
+  // cout << "testing the copy now: " << endl;
+  // BPlusTree<int> bptree;
+  // bptree.copy_tree(bpt);
+  // itr = bptree.begin();
+  // cout << *itr << endl;
+  // itr++;
+  // cout << *itr << endl;
+  // itr++;
+  // cout << *itr << endl;
   return true;
 }
 
@@ -130,20 +166,20 @@ TEST(TEST_STUB, TestStub) {
   EXPECT_EQ(1, test_stub(false));
 }
 
-// TEST(TEST_TREE, TestTree) {
-  
-//   //EXPECT_EQ(0, <your individual test functions are called here>);
-
-//   EXPECT_EQ(1, test_tree(false));
-// }
-
-
-TEST(TEST_SQL, TestSql) {
+TEST(TEST_TREE, TestTree) {
   
   //EXPECT_EQ(0, <your individual test functions are called here>);
 
-  EXPECT_EQ(1, test_sql(false));
+  EXPECT_EQ(1, test_tree(false));
 }
+
+
+// TEST(TEST_SQL, TestSql) {
+  
+//   //EXPECT_EQ(0, <your individual test functions are called here>);
+
+//   EXPECT_EQ(1, test_sql(false));
+// }
 
 
 

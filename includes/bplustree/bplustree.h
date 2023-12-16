@@ -174,24 +174,9 @@ public:
     
     Iterator find (const T& key)
     {
-        //cout << "goes in here" << endl;
-        //Iterator stub;
-        //cout << "its begin" << endl;
-        //call_test();
-        
-        //Iterator f = begin();
-        // cout << "full func: " <<*begin() << endl;
-        // cout << "dereferenced: " <<*f << endl; //is not begin 
-        // cout << "incrementing" << endl;
-        // f++;
-        // cout << "second deref: " <<*f << endl;
-        
-
-        //half works
-
         if (!contains(key))
         {
-            //cout << "here" << endl;
+            cout << "here" << endl;
             Iterator notHere(NULL);
             return notHere;
         }
@@ -208,19 +193,6 @@ public:
         }
 
 
-        //requires Iterator ++ overload
-        // cout << key << endl;
-        // Iterator f = begin();
-        // for (Iterator i = begin(); i != end(); i++)// something in this line (likely ++)
-        // {
-        //     cout << "goes into loop" << endl;
-        //     cout << *(i) << endl;
-        //     if (*(i) == key)
-        //     {
-        //         return i;
-        //     }
-        // }
-        // return NULL;
 
     }         
     //return an iterator to this key.
@@ -637,8 +609,6 @@ BPlusTree<T>::~BPlusTree()
 template<typename T>
 BPlusTree<T>& BPlusTree<T>::operator =(const BPlusTree<T>& RHS)
 {
-    data_count = 0;
-    child_count = 0;
     copy_tree(RHS);
     return *this;
 }
@@ -740,6 +710,7 @@ void BPlusTree<T>::copy_tree(const BPlusTree<T>& other)
 {
     //cout << "orig data[0]: " << other.data[0] << endl;
     //move into other copy
+    
     BPlusTree<T> *temp = nullptr;
     copy_tree (other, temp);
 
