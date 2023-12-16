@@ -69,25 +69,16 @@ public:
         }
         Iterator operator ++(int unused)
         {
-            Iterator temp = _it;
-            _it++;
-
-            //needs more? 
-            //post ++ operator?
-            return temp;
+            return _it++;
         }
         Iterator operator ++()
         {
-            _it++;
-            return *this;
+            return ++_it;
         }
 
         Pair<K, V> operator *()
         {
-            Pair<K, V> temp = *(_it);
-            //return *(_it);
-            //return Pair <K, V>();
-            return temp;
+            return *_it;
         }
         friend bool operator ==(const Iterator& lhs, const Iterator& rhs)
         {
@@ -180,7 +171,7 @@ public:
     }
     bool contains(const Pair<K, V>& target) const
     {
-        return map.contains(target.key);
+        return map.contains(target);
     }
 
     // I have not writtent hese yet, but we will need them:
@@ -202,30 +193,14 @@ public:
 
     Iterator upper_bound(K& key)
     {
-        Pair<K, V> temp(key);
-        return Iterator(map.upper_bound(key));
+        //Pair<K, V> temp(key);
+        return map.upper_bound(key);
     }
     Iterator lower_bound(K& key)
     {
         Pair <K, V> temp(key);
-        // Pair<K, V> check;
-        // cout << "in lower bound " << endl;
-        // cout << *(begin()) << endl;
-        // for (Iterator i = begin(); i != end(); i++)
-        // {
-        //     check = *i;
-        //     cout << "enters this loop" << endl;
-        //     cout << check << endl;
-        //     if (check >= temp)
-        //     {
-        //         cout << "return issue" << endl;
-        //         return i;
-        //     }
-        // }
-        // cout << "here?" << endl;
-        // Iterator itr = end();
-        // return itr;
-        return Iterator(map.lower_bound(temp));
+
+        return map.lower_bound(key);
     }
     bool is_valid(){return map.is_valid();}
 

@@ -43,6 +43,7 @@ public:
         read_info();
         reindex();
         numRecords = get_numRecords();
+        
     }
     ~Table(){}
 
@@ -72,10 +73,7 @@ public:
     friend ostream& operator<< (ostream& outs, const Table& t) //its goin
     {
         outs << endl;
-        //fieldnames size doesnt work, I need a way to show the amount of records INSIDE the file?
-        //perhaps another variable for this can work, probably is the best solution since
-        //it can be tracked as I insert? <- idk if bad idea 
-        //i wish i was born in the bc 9000 id rather gather fruit and kill mammoth with the boys
+
         outs << "Table name: " << t.name << ", records: " << t.numRecords << endl;
         outs << "record" << "\t";
         for (int i = 0; i < t.fieldNames.size(); i++)
@@ -83,35 +81,21 @@ public:
             outs << t.fieldNames[i] << "\t";
         }
         outs << endl;
-        //outs << "recno before FileRecord : " << t._recno << endl;
-        //this reads every record
+
         FileRecord r2;
         fstream f;
         
-        //open the file for reading and writing.
         string _bfilename = t.name + ".bin";
         open_fileRW(f,_bfilename.c_str());
         int i = 0;
-        long bytes = r2.read(f, i); //empty envelop to be filled by the FileRecord object
-        //cout << "start byte (long returned from r2.read(f,i)): " << bytes << endl;
+        long bytes = r2.read(f, i); 
         while (bytes>0)
         {
-            cout << i << "\t" << r2 << endl; //if I wanna change the look of this output, i need to change the
-                                    //outs operator for r2, to add spaces between each field
+            cout << i << "\t" << r2 << endl; 
             i++;
             bytes = r2.read(f, i);
-            //cout << "loop byte (long returned from r2.read from the loop): " << bytes <<endl;
         }
         f.close();
-
-        //checks inside of mmaps
-        // cout << "inside of mmap: " << endl;
-
-        // for (int j = 0; j < t.indices.size(); j++)
-        // {
-        //     outs << t.indices[j];
-        //     outs << '\t';
-        // }
 
         outs << endl;
         return outs;
@@ -122,17 +106,11 @@ public:
 
 private:    
     string name;
-    
-
     vector <long> recnos;
-    
-    //fstream f;
     bool empty;
     long _recno = -1;
     int numRecords = 0;
-    //FileRecord fr;
-    
-    //int last_record;
+
     
 };
 

@@ -23,9 +23,7 @@ public:
 
         T operator *()
         {
-            //return the value at data[entry]
-            //cout << "this is in dereference: "; 
-            //cout <<it->data[key_ptr] << endl;
+
             return it->data[key_ptr];
         }
 
@@ -62,24 +60,24 @@ public:
         }
         friend bool operator ==(const Iterator& lhs, const Iterator& rhs)
         {
-            if (lhs.it == nullptr || rhs.it == nullptr)
+            if (lhs.it == rhs.it && lhs.key_ptr == rhs.key_ptr)
             {
                 return true;
             }
-            if (lhs.it == nullptr || rhs.it == nullptr)
+            else
             {
                 return false;
             }
-            return *(lhs) == *(rhs);
+
             //return true;
         }
         friend bool operator !=(const Iterator& lhs, const Iterator& rhs)
         {
 
-            if (lhs.it == nullptr)
-            {
-                return false;
-            }
+            // if (lhs.it == nullptr)
+            // {
+            //     return false;
+            // }
         
             //int check = lhs.key_ptr;
             return !(lhs == rhs);
@@ -137,7 +135,7 @@ public:
         if (!contains(key))
         {
             //Iterator notHere(NULL);
-            return Iterator(NULL);
+            return Iterator(nullptr);
         }
         else
         {
@@ -160,8 +158,6 @@ public:
     //     NULL if not there.
     Iterator lower_bound(const T& key)
     {
-
-        int count = 0;
         for (Iterator i = begin(); i != end(); i++)
         {
 
@@ -197,7 +193,7 @@ public:
     }
     Iterator end()
     {
-        return Iterator(NULL);
+        return Iterator(nullptr);
     }
                                          //exist or not, the next entry  >entry
     int size() const;                           //count the number of elements
@@ -308,7 +304,30 @@ private:
 template <typename T>
 bool BPlusTree<T>::is_valid()
 {
-    return true;
+    if (is_leaf())
+    {
+        if (data_count < MINIMUM || data_count > MAXIMUM)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+
+    {
+        if (child_count != data_count +1 || data_count < MINIMUM || data_count > MAXIMUM)
+        {
+            return false;
+        }
+        for (int i = 0 ; i< child_count; i++) //loop through all children
+        {
+            return subset[i]->is_valid();
+        }
+    }
+
 }
 
 template<typename T>
@@ -383,115 +402,31 @@ T& BPlusTree<T>::get_existing(const T& entry)
             return data[here];
             //return temp;
         }
+        else{}
 
     }
-    else if (here <= data_count && is_leaf() == false)
+    else if (found)
     {
-        return (subset[here+found]->get_existing(entry)); //changed this still working
+        return data[here]; //changed this still working
         /*if (data[here] != entry])
         {
             return subset[here]->find(entry);
         }*/
     }
-    return data[here];
+    else 
+    {
+        return subset[here+found]->get_existing(entry);
+    }
+    return data[here];//not proper but compiler complains without
 }
 template <typename T>
 const T& BPlusTree<T>::get(const T& entry)const
 {
     assert(!contains(entry));
-    //cout << "goes here" << endl;
     return *(find_ptr(entry));
-    // if (!contains(entry))
-    // {
-    //     insert(entry);
-    //     return get_existing(entry);
-    // }
-    // else
-    // {
-    //     return get_existing(entry);
-    // }
-    //T* temp = nullptr;
-    //return temp;
-}
-
-template<typename T>
-void BPlusTree<T>::make_tree()
-{
-    data[0] = 100;
-    data[1] = 500; //first row
-    data_count = 2;
-    child_count = 3;
-
-    //second row 0
-    subset[0] = new BPlusTree<T>;
-    subset[0]->data[0] = 50;    
-    subset[0]->data[1] = 75;
-    subset[0]->data_count = 2;
-    subset[0]->child_count = 3;
-    //second row 1
-    subset[1] = new BPlusTree<T>;
-    subset[1]->data[0] = 200;
-    subset[1]->data_count = 1;
-    subset[1]->child_count = 2;
-
-    //second row 2
-    subset[2] = new BPlusTree<T>;
-    subset[2]->data[0] = 700;
-    subset[2]->data[1] = 900;
-    subset[2]->data_count = 2;
-    subset[2]->child_count = 3;
-
-
-    //third row 0
-    subset[0]->subset[0] = new BPlusTree<T>;
-    subset[0]->subset[0]->data[0] = 25;
-    subset[0]->subset[0]->data_count = 1;
-    subset[0]->subset[0]->child_count = 0;
-
-    subset[0]->subset[1] = new BPlusTree<T>;
-    subset[0]->subset[1]->data[0] = 60;
-    subset[0]->subset[1]->data_count = 1;
-    subset[0]->subset[1]->child_count = 0;
-
-
-    subset[0]->subset[2] = new BPlusTree<T>;
-    subset[0]->subset[2]->data[0] = 90;
-    subset[0]->subset[2]->data_count = 1;
-    subset[0]->subset[2]->child_count = 0;
-
-    //third row 1
-    subset[1]->subset[0] = new BPlusTree<T>;
-    subset[1]->subset[0]->data[0] = 150;
-    subset[1]->subset[0]->data_count = 1;
-    subset[1]->subset[0]->child_count = 0;
-
-
-    subset[1]->subset[1] = new BPlusTree<T>;
-    subset[1]->subset[1]->data[0] = 250;
-    subset[1]->subset[1]->data_count = 1;
-    subset[1]->subset[1]->child_count = 0;
-
-    //third row 2
-    subset[2]->subset[0] = new BPlusTree<T>;
-    subset[2]->subset[0]->data[0] = 600;
-    subset[2]->subset[0]->data_count = 1;
-    subset[2]->subset[0]->child_count = 0;
-
-
-
-    subset[2]->subset[1] = new BPlusTree<T>;
-    subset[2]->subset[1]->data[0] = 800;
-    subset[2]->subset[1]->data_count = 1;
-    subset[2]->subset[1]->child_count = 0;
-
-
-
-    subset[2]->subset[2] = new BPlusTree<T>;
-    subset[2]->subset[2]->data[0] = 1000;
-    subset[2]->subset[2]->data_count = 1;
-    subset[2]->subset[2]->child_count = 0;
 
 }
+
 
 template <typename T>
 void BPlusTree<T>::print_tree(int level, ostream& outs) const
@@ -640,20 +575,14 @@ void BPlusTree<T>::remove(const T& entry)
 template<typename T>
 void BPlusTree<T>::clear_tree()
 {
-    if (is_leaf())
+    data_count = 0;
+    for (int i =0;i < child_count; i++)
     {
-        data_count = 0;
-
-        return;
+        subset[i]->clear_tree();
+        delete subset[i];
+        subset[i] = nullptr;
     }
-    //cout << child_count-1 << endl;
-    subset[child_count-1]->clear_tree(); //unwanted child
-    for (int i = data_count-1; i >= 0; i--)
-    {
-        subset[i]->clear_tree();// recurses on last line's index
-        data_count = 0;
-        child_count = 0;
-    }
+    child_count = 0;
 }                          
 //clear this object
 //  (delete all nodes etc.)
@@ -747,24 +676,14 @@ bool BPlusTree<T>::contains(const T& entry) const
 template<typename T>
 bool BPlusTree<T>::contains(const T& entry) 
 {
+    
     int index = first_ge(data, data_count, entry);
-
-    if (is_leaf())
-    {
-        if (data[index] == entry)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    else if (data[index] == entry)
+    bool found = (index < data_count && data[index] == entry);
+    if (found)
     {
         return true;
     }
-    else
+    else if (!is_leaf() && index <= data_count)
     {
         return subset[index]->contains(entry);
     }
@@ -841,7 +760,13 @@ const T* BPlusTree<T>::find_ptr(const T& entry) const
 template<typename T>
 int BPlusTree<T>::size() const
 {
-    return data_count;
+    int ct = 0;
+    Iterator it = begin();
+    for (; it != end(); it++)
+    {
+        ct++;
+    }
+    return ct;
 }                           
 //count the number of elements
 //              in the tree
@@ -920,22 +845,23 @@ void BPlusTree<T>::loose_insert(const T& entry)
     {
 
         //cout << "entry: " << entry << endl;
-        if (found == true && data[index] == entry)
+        if (found == true)
         //if found, simply override <- dont do 
         {
             data[index] = data[index] + entry;
             return;
         }
-
+        else
+        {
+            ordered_insert(data, data_count, entry);
+        }
         //actual value, insert here
         //cout << "here" << endl;
-        ordered_insert(data, data_count, entry);
         //cout << "dc: " <<data_count << endl;
 
         return;
     }
     subset[index+found]->loose_insert(entry);
-
     if (subset[index+found]->data_count > MAXIMUM)
     {
         fix_excess(index+found);
@@ -951,9 +877,6 @@ void BPlusTree<T>::loose_insert(const T& entry)
 template<typename T>
 void BPlusTree<T>::fix_excess(int i)
 { 
-    //split from midpoint+1 and insert that into temp
-    //insert midpoint into parent
-    
     int midpoint_index = subset[i]->data_count/2;
 
     //cout << midpoint_index << endl;

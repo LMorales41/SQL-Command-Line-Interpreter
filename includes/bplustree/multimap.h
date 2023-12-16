@@ -247,13 +247,13 @@ public:
     Iterator lower_bound(K& key)
     {
         MPair<K, V> temp (key);
-        return Iterator(mmap.lower_bound(temp));
+        return mmap.lower_bound(temp);
     }
     Iterator upper_bound (K& key)
     {
         MPair <K, V> temp (key);
         //cout << "UB in mmap: " << temp << endl;
-        return Iterator(mmap.upper_bound(temp));
+        return mmap.upper_bound(temp);
     }
     Iterator equal_range(int key)
     {
