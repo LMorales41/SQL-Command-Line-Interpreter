@@ -133,7 +133,6 @@ public:
     {
         if (!contains(key))
         {
-            cout << "none here" << endl;
             Iterator notHere(NULL);
             return notHere;
         }
@@ -144,9 +143,10 @@ public:
             T* temp = find_ptr(key);
             BPlusTree <T>* bagel = new BPlusTree<T>();
             bagel->insert(*temp);
+            return bagel;
             //cout << *temp << endl;
-            Iterator found(bagel);
-            return found;
+            // Iterator found(bagel);
+            // return found;
         }
 
 

@@ -21,7 +21,9 @@ bool test_tree(bool debug = false)
     cout << "testB:: test-sub() entering test_sub" << endl;
   }
 
-  BPlusTree<int> bpt;
+  //BPlusTree<int> bpt;
+  //time to test mmap
+  MMap <int, int> bpt;
   BPlusTree<int> bptree;
   for (int i = 0; i < 100; i++)
   {
@@ -34,16 +36,16 @@ bool test_tree(bool debug = false)
     // {
     //   bpt.insert(i);
     // }
-    bpt.insert(i);
+    bpt.insert(i, i+1);
   }
   cout << bpt << endl;
   cout << bpt.contains(2) << endl;
   cout << bpt.contains(1) << endl;
   cout << bpt.contains(4) << endl;
-  cout << (bpt.get_existing(4)) << endl;
-  cout << "what does the fox say: " <<(bpt.get_existing(100)) << endl;
-  cout << "on something that exists: " << *(bpt.find_ptr(20)) << endl;
-  cout << "about as real as my girlfriend: " << bpt.find_ptr(101) << endl;
+  // cout << (bpt.get_existing(4)) << endl;
+  // cout << "what does the fox say: " <<(bpt.get_existing(100)) << endl;
+  // cout << "on something that exists: " << *(bpt.find_ptr(20)) << endl;
+  // cout << "about as real as my girlfriend: " << bpt.find_ptr(101) << endl;
 
   cout << "real as taxes: " << *bpt.find(69) << endl;
 
