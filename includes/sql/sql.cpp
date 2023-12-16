@@ -5,8 +5,8 @@ Table SQL::command(string commandline)
     //Table t;
     char s [500];
     strcpy(s, commandline.c_str());
-    // Parser prsr (s);
-    prsr.set_string(s);
+    Parser prsr (s);
+    // prsr.set_string(s);
     //cout << "issue with table?" << endl;
     //prsr.get_parse_tree();
     // ptree.clear();
@@ -54,7 +54,7 @@ Table SQL::run_command(string commandstr)
         //if its a table, we need  a name
         pkey = "table_name"; // my field table name will always have this key
         
-        temp = ptree[pkey].at(0); //shoul only be one line 
+        temp = ptree[ pkey].at(0); //shoul only be one line 
         cout << "in make table: " << temp << endl;
         pkey = "col";
         tempv = ptree[pkey];

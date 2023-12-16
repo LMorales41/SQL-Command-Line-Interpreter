@@ -728,6 +728,7 @@ void Table::reindex()
     //cout << "start byte (long returned from r2.read(f,i)): " << bytes << endl;
     while (bytes>0)
     {
+        //recnos.push_back(i);
         //cout<<"record "<<i<<": "<<r2<<endl;
         row = r2.vectorized_record(fieldindexes);
         for (int z = 0; z< row.size(); z++)

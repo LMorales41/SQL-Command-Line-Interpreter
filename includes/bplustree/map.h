@@ -51,7 +51,6 @@ struct Pair
     }
     friend Pair<K, V> operator + (const Pair<K, V>& lhs, const Pair<K, V>& rhs)
     {
-        Pair<K, V> temp;
         return rhs;
     }
 };

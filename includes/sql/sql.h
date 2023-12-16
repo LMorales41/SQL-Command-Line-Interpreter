@@ -15,6 +15,13 @@
 #include "../stl_utils/vector_utilities.h"
 using namespace std;
 
+const string table_name = "table_name";
+const string command = "command";
+const string col = "col";
+const string values = "values";
+const string fields = "fields";
+const string condition = "condition";
+
 class SQL
 {
     public:
