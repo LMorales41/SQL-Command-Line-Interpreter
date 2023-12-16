@@ -107,13 +107,13 @@ public:
         key_count = 0;
     }
 //  Iterators
-    typename Map <K,V>::Iterator begin()
+    Iterator begin()
     {
         return map.begin();
     }
-    typename Map<K,V>::Iterator end()
+    Iterator end()
     {
-        return Map<K,V>::Iterator(map.end());
+        return map.end();
     }
 
 //  Capacity
@@ -171,11 +171,11 @@ public:
     }
 
 //  Operations:
-    typename Map<K,V>::Iterator find(const K& key)
+    Iterator find(const K& key)
     {
         Pair <K, V> temp(key);
         //cout << "in maps find" << endl;
-        return Map<K, V>::Iterator (map.find(temp));
+        return Iterator (map.find(temp));
         //return found;
     }
     bool contains(const Pair<K, V>& target) const
@@ -200,12 +200,12 @@ public:
         return it;
     }*/
 
-    typename Map<K,V>::Iterator upper_bound(K& key)
+    Iterator upper_bound(K& key)
     {
         Pair<K, V> temp(key);
-        return Map<K, V>::Iterator(map.upper_bound(key));
+        return Iterator(map.upper_bound(key));
     }
-    typename Map<K,V>::Iterator lower_bound(K& key)
+    Iterator lower_bound(K& key)
     {
         Pair <K, V> temp(key);
         // Pair<K, V> check;
@@ -225,7 +225,7 @@ public:
         // cout << "here?" << endl;
         // Iterator itr = end();
         // return itr;
-        return Map<K,V>::Iterator(map.lower_bound(temp));
+        return Iterator(map.lower_bound(temp));
     }
     bool is_valid(){return map.is_valid();}
 

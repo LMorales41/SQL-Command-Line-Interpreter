@@ -216,11 +216,10 @@ public:
         //return nullptr;
     }
 
-    typename MMap<K, V>::Iterator find(const K& key)
+    Iterator find(const K& key)
     {
-        MPair <K, V> temp (key);
-        return MMap<K, V>::Iterator((mmap.find(key)));
-        // return it;
+         Iterator it(mmap.find(key));
+        return it;
     }
     int count(const K& key)
     {
@@ -231,30 +230,30 @@ public:
         MPair <K, V> temp (key);
         
         return mmap.get(temp).value_list;
-        // V print_this;
-        // vector <V> values = mmap.get(temp).value_list;
-        // for (int i = 0; i < values.size(); i++)
-        // {
-        //     print_this += (values[i]);
-        //     print_this += " ";
-        // }
-        // return print_this;
+
+    }
+    vector<V> at (const K& key) const //const ver
+    {   
+        MPair <K, V> temp (key);
+        
+        return mmap.get(temp).value_list;
+
     }
     // I have not writtent hese yet, but we will need them:
     //    int count(const K& key);
     //    lower_bound
     //    upper_bound
     //    equal_range:
-    typename MMap<K,V>::Iterator lower_bound(K& key)
+    Iterator lower_bound(K& key)
     {
         MPair<K, V> temp (key);
-        return MMap<K,V>::Iterator(mmap.lower_bound(temp));
+        return Iterator(mmap.lower_bound(temp));
     }
-    typename MMap<K, V>::Iterator upper_bound (K& key)
+    Iterator upper_bound (K& key)
     {
         MPair <K, V> temp (key);
         //cout << "UB in mmap: " << temp << endl;
-        return MMap<K, V>::Iterator(mmap.upper_bound(temp));
+        return Iterator(mmap.upper_bound(temp));
     }
     Iterator equal_range(int key)
     {

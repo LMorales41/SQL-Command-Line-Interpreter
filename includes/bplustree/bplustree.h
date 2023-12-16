@@ -64,6 +64,10 @@ public:
         {
             if (lhs.it == nullptr || rhs.it == nullptr)
             {
+                return true;
+            }
+            if (lhs.it == nullptr || rhs.it == nullptr)
+            {
                 return false;
             }
             return *(lhs) == *(rhs);
@@ -128,12 +132,12 @@ public:
                                                 //          NULL if not there.
     const T* find_ptr(const T& entry) const;
     
-    typename BPlusTree<T>::Iterator find (const T& key)
+    Iterator find (const T& key)
     {
         if (!contains(key))
         {
             //Iterator notHere(NULL);
-            return BPlusTree<T>::Iterator(NULL);
+            return Iterator(NULL);
         }
         else
         {
@@ -142,7 +146,8 @@ public:
             T* temp = find_ptr(key);
             BPlusTree <T>* bagel = new BPlusTree<T>();
             bagel->insert(*temp);
-            return bagel;
+            //return bagel;
+            return Iterator(bagel);
             //cout << *temp << endl;
             // Iterator found(bagel);
             // return found;
@@ -153,7 +158,7 @@ public:
     }         
     //return an iterator to this key.
     //     NULL if not there.
-    typename BPlusTree<T>::Iterator lower_bound(const T& key)
+    Iterator lower_bound(const T& key)
     {
 
         int count = 0;
@@ -166,12 +171,12 @@ public:
                 return i;
             }
         }
-        return BPlusTree<T>::Iterator(NULL);
+        return Iterator (NULL);
     }  
     //return first that goes NOT BEFORE
     // key entry or next if does not
     // exist: >= entry
-    typename BPlusTree<T>::Iterator upper_bound(const T& key)
+    Iterator upper_bound(const T& key)
     {
         for (Iterator i = begin(); i != end(); i++)
         {
@@ -185,21 +190,21 @@ public:
         return NULL;
     }  
     //return first that goes AFTER key
-    typename BPlusTree<T>::Iterator begin() // works fine
+    Iterator begin() // works fine
     {
-        BPlusTree<T>::Iterator iter(get_smallest_node());
-        return iter;
+        return Iterator (get_smallest_node());
+        //return iter;
     }
-    typename BPlusTree<T>::Iterator end()
+    Iterator end()
     {
-        return BPlusTree<T>::Iterator(NULL);
+        return Iterator(NULL);
     }
                                          //exist or not, the next entry  >entry
     int size() const;                           //count the number of elements
                                                 //              in the tree
     bool empty() const;                         //true if the tree is empty
 
-    bool is_valid(){return true;}
+    bool is_valid();
                                                 //print a readable version of
                                                 //                  the tree
     void print_tree(int level = 0, ostream &outs=cout) const;
@@ -300,6 +305,12 @@ private:
 
 };
 
+template <typename T>
+bool BPlusTree<T>::is_valid()
+{
+    return true;
+}
+
 template<typename T>
 string BPlusTree<T>::pre_order()
 {
@@ -358,16 +369,15 @@ string BPlusTree<T>::post_order()
 template <typename T>
 T& BPlusTree<T>::get_existing(const T& entry)
 {
-    T temp;
     int here = first_ge(data, data_count, entry); //index to check
     bool found = here <= data_count && data[here] == entry;
     //cout << "here in find:" << here << endl;
     //cout << " data: " << data[here] << " ";
-    if ( is_leaf() && here <= data_count) 
+    if ( is_leaf()) 
     {
         //cout << "recognized as a leaf" << endl;
         //cout << data[here] << endl;
-        if (data[here] == entry)
+        if (found)
         { 
             // address @ data[here]
             return data[here];
@@ -390,15 +400,16 @@ const T& BPlusTree<T>::get(const T& entry)const
 {
     assert(!contains(entry));
     //cout << "goes here" << endl;
-    if (find_ptr(entry) == nullptr) //lots of traversals
-    {
-        //insert(entry);
-        return find_ptr(entry);
-    }
-    else
-    {
-        return find_ptr(entry);
-    }
+    return *(find_ptr(entry));
+    // if (!contains(entry))
+    // {
+    //     insert(entry);
+    //     return get_existing(entry);
+    // }
+    // else
+    // {
+    //     return get_existing(entry);
+    // }
     //T* temp = nullptr;
     //return temp;
 }
@@ -552,7 +563,7 @@ BPlusTree<T>::~BPlusTree()
 template<typename T>
 BPlusTree<T>& BPlusTree<T>::operator =(const BPlusTree<T>& RHS)
 {
-    clear_tree();
+    // clear_tree();
     copy_tree(RHS);
     return *this;
 }
@@ -665,7 +676,9 @@ void BPlusTree<T>::copy_tree(const BPlusTree<T>& other)
 template <typename T>
 void BPlusTree<T>::copy_tree(const BPlusTree<T>& other, BPlusTree<T>*& last_node)
 {
+    clear_tree();
     copy_array(data, other.data, data_count, other.data_count); //goes uppy here
+    
     if (is_leaf()) //next only exists at leaves
     {
         if (last_node != nullptr) 
@@ -701,7 +714,14 @@ bool BPlusTree<T>::contains(const T& entry) const
 
     if (is_leaf())
     {
-        return data[index] == entry;
+        if (data[index] == entry)
+        {
+            return true;
+        }
+        else {
+            return false;
+        }
+        
         //if anything breaks it was here
         // if (data[index] == entry)
         // {
@@ -720,6 +740,7 @@ bool BPlusTree<T>::contains(const T& entry) const
     {
         return subset[index]->contains(entry);
     }
+    return false;
 }
 
 
@@ -730,7 +751,14 @@ bool BPlusTree<T>::contains(const T& entry)
 
     if (is_leaf())
     {
-        return data[index] == entry;
+        if (data[index] == entry)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     else if (data[index] == entry)
     {
@@ -740,6 +768,7 @@ bool BPlusTree<T>::contains(const T& entry)
     {
         return subset[index]->contains(entry);
     }
+    return false;
 }              
 //true if entry can be found in
 //                  the array
@@ -768,34 +797,21 @@ T& BPlusTree<T>::get(const T& entry)
 template<typename T>                                           
 T* BPlusTree<T>::find_ptr(const T& entry)
 {
-    T temp;
-    int here = first_ge(data, data_count, entry); //index to check
+    int here = first_ge(data, data_count, entry);
     bool found = here < data_count && data[here] == entry;
-    //cout << "here in find:" << here << endl;
-    //cout << " data: " << data[here] << " ";
-    if ( is_leaf() && here < data_count ) 
+    if (is_leaf() && here < data_count)
     {
-        //cout << "recognized as a leaf" << endl;
-        //cout << data[here] << endl;
         if (data[here] == entry)
-        { 
-            // address @ data[here]
+        {
             return &data[here];
-            //return temp;
         }
-
     }
     else if (here <= data_count && is_leaf() == false)
     {
         return subset[here+found]->find_ptr(entry);
-        /*if (data[here] != entry])
-        {
-            return subset[here]->find(entry);
-        }*/
     }
 
-
-    return nullptr; // if nothing else
+    return nullptr;
 
 }                    
 //return a pointer to this key.
@@ -804,32 +820,21 @@ T* BPlusTree<T>::find_ptr(const T& entry)
 template <typename T>
 const T* BPlusTree<T>::find_ptr(const T& entry) const
 {
-    T temp;
     int here = first_ge(data, data_count, entry); //index to check
-    bool found = here < data_count && data[here] == entry;
-    //cout << "here in find:" << here << endl;
-    //cout << " data: " << data[here] << " ";
-    if ( is_leaf() && here < data_count ) 
+    if (is_leaf())
     {
-        //cout << "recognized as a leaf" << endl;
-        //cout << data[here] << endl;
-        if (data[here] == entry)
-        { 
-            // address @ data[here]
-            return &data[here];
-            //return temp;
-        }
-
-    }
-    else if (here <= data_count && is_leaf() == false)
-    {
-        return subset[here+found]->find_ptr(entry);
-        /*if (data[here] != entry])
+        if (here < data_count && data[here] == entry)
         {
-            return subset[here]->find(entry);
-        }*/
+            return &data[here];
+        }
     }
-    return nullptr;
+    else if (here <= data_count && data[here] != entry)
+    {
+        return subset[here]->find_ptr(entry);
+    }
+
+
+    return nullptr; // if nothing else
 }
 
 
