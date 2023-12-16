@@ -1,16 +1,20 @@
 #include "parser.h"
 
 int Parser::_table[MAX_ROWS][MAX_COLUMNS];
+Map<string, int> Parser::keywords;
+bool Parser::map_table_initialized = false;
 
 Parser::Parser(char* s)
 {
-  make_map();
-  make_table();
+  if (map_table_initialized == false)
+  {
+    make_map();
+    make_table();
+    map_table_initialized = true;
+  }
 
   tokenize(s);
-
-
-
+  //cant static this one bc it changes every time
   get_parse_tree();
 
 }

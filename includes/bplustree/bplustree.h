@@ -31,64 +31,26 @@ public:
 
         const T operator *() const
         {
-            //return the value at data[entry]
-            //cout << "this is in dereference: " <<it->data[key_ptr] << endl;
+
             return it->data[key_ptr];
         }
 
         Iterator operator++(int un_used) //post increment
         {   
-            //cout << "operator++ b+" << endl;
             
             Iterator temp (it, key_ptr);
-            //if key_ptr = 0 && data_count = 1;
-            //0+1 = 1 && data_count = 0;
-            //2, 0, 1 > 2 = false
-            
-            //cout << "index: " << key_ptr << endl;
-            //cout << "dc: " << it->data_count << endl;
-            //cout << "inside it's first elem: " << it->data[0] << endl;
             key_ptr++;
-            //cout << "here" << endl;
-            //cout << "dc: " <<it->data_count << endl;
-            // cout << "d[0]" << it->data[0] << endl;
-            //cout << "k_p: " << key_ptr << endl;
+
             if (key_ptr == it->data_count)
             {
-                
-                //cout << "aaaaaaaa" << endl;
                 it = it->next;
-                //cout << "after changing it" << endl;
                 key_ptr = 0;
-                // if (it == nullptr)
-                // {
-                //     cout << "gwen" << endl;
-                // }
-                //cout << "bbbbb" << endl;
-                //cout << "gwen :";
-                //cout <<it->data_count << endl;
-                //cout << "ayaya: " << it->data[0] << endl;
-                //
             }
-            //cout << "k_p: " << key_ptr << endl;
-            //cout << "dc: " <<it->data_count << endl;
-            //cout << *it << endl;
-            //cout << "its the return of the bug: " <<*temp << endl;
-            //cout << "return issue  " << endl;
+
             return temp; //return the held one
         }
         Iterator operator++()
         {
-            //Iterator i;
-            // if (key_ptr == it->data_count-1 )
-            // {
-            //     it = it->next;
-            //     key_ptr = 0;
-            // }
-            // else
-            // {
-            //     key_ptr++;
-            // }
             key_ptr++;
             if (key_ptr == it->data_count)
             {
@@ -100,9 +62,6 @@ public:
         }
         friend bool operator ==(const Iterator& lhs, const Iterator& rhs)
         {
-            //int check = lhs.key_ptr;
-            // cout << "in ==" << endl;
-            // cout << "lhs: " << *(lhs) << endl;
             if (lhs.it == nullptr || rhs.it == nullptr)
             {
                 return false;
@@ -112,9 +71,7 @@ public:
         }
         friend bool operator !=(const Iterator& lhs, const Iterator& rhs)
         {
-            // cout << "in !=" << endl;
-            // cout<< "lhs: " << *(lhs) << endl;
-            //cout<< "rhs: " << *rhs << endl;
+
             if (lhs.it == nullptr)
             {
                 return false;
@@ -176,7 +133,7 @@ public:
     {
         if (!contains(key))
         {
-            cout << "here" << endl;
+            cout << "none here" << endl;
             Iterator notHere(NULL);
             return notHere;
         }
@@ -199,20 +156,17 @@ public:
     //     NULL if not there.
     Iterator lower_bound(const T& key)
     {
-        //cout << "enters lower_bound b+" << endl;
+
         int count = 0;
         for (Iterator i = begin(); i != end(); i++)
         {
-            //cout << count <<": " <<  *i << endl;
-            //count++;
-            //cout << "enters loop for it" << endl;
+
             if (*i >= key)
             {
                 //cout << "enters equivalency op" << endl;
                 return i;
             }
         }
-        //cout << "doesnt find anything for " << key << endl;
         return Iterator(NULL);
     }  
     //return first that goes NOT BEFORE
@@ -220,14 +174,9 @@ public:
     // exist: >= entry
     Iterator upper_bound(const T& key)
     {
-        //cout << "upper bound in b+" << endl;
-        //cout << "key: " << key << endl;
         for (Iterator i = begin(); i != end(); i++)
         {
-            //cout << "dereferenced i in loop: " << *i << endl;
-            //cout << "bool: " <<(*i > key) << endl;
-            //i++;
-            //cout << "bool: " << (*i > key) << endl;
+
             if (*i > key)
             {
                 //cout << "return issue" << endl;
@@ -239,10 +188,8 @@ public:
     //return first that goes AFTER key
     Iterator begin() // works fine
     {
-        //cout << "here in begin" << endl;
-        //cout << "tiny node: "  <<*(get_smallest_node()) << endl;
+
         Iterator iter(get_smallest_node());
-        //cout << "tiny node begin: " <<*iter << endl;
         return iter;
     }
     Iterator end()
