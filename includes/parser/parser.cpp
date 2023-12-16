@@ -139,23 +139,7 @@ void Parser::make_map()
 void Parser::make_table() //add this back in if it doesnt work -> (int _table[][MAX_COLUMNS])
 {
     init_table(_table); 
-    //fail states/not success states
-    // mark_fail(_table, 0);
-    // mark_fail (_table, 5); 
 
-    //success states
-    // mark_success(_table, 1);
-    // mark_success(_table, 2);
-    // mark_success(_table, 3);
-    // mark_success(_table,4);
-    // mark_success (_table, 6);
-
-
-    //can also be select lname from student where age < 10 and fname > ape
-
-
-    // //what state each char will lead to
-    //selects
     mark_success(_table, 4); //select lname from student ^^
     mark_success(_table, 8); //select lname from student where age < 10 ^^
 

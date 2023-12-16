@@ -3,33 +3,75 @@
 Table SQL::command(string commandline)
 {
     //Table t;
-    ptree.clear();
     char s [500];
     strcpy(s, commandline.c_str());
     Parser prsr (s);
-    // prsr.set_string(s);
-    //cout << "issue with table?" << endl;
-    //prsr.get_parse_tree();
-    // ptree.clear();
     ptree = prsr.get_parse_tree();
-    //cout << "issue here?" << endl;
-    // cout << "ptree in command :" << endl;
-    // cout << ptree << endl;
-    //ptree.print_lookup();
-    string command = "command";
-    // string table = "table_name";
-    string moving;
-    moving = ptree[command].at(0);
-    //cout << "after [] .at" << endl;
-    // cout << "N STUFF " << moving << endl;
-    // string mysanity = ptree[table].at(0);
-    // cout << "im going to cry" << mysanity << endl;
-    _keep_track_table = run_command(moving);
-    //cout << "after run command" << endl;
-   // ptree.clear();
-    return _keep_track_table;
+    string command = ptree["command"][0];
 
-    //return t;
+    if (command == "make" || command == "create")
+    {
+        string name_m =  ptree["table_name"][0];
+        vector<string> col = ptree["col"]; //returns a vetor by default
+        //make the tabel
+
+        Table t (name_m, col);
+        ptree.clear();
+        _keep_track_table = t;
+        return _keep_track_table;
+    }
+    else if (command == "insert")
+    {
+        string name_i = ptree["table_name"][0];
+        vector<string>values = ptree["values"]; //returns vectori
+        //now create a table insert into then assign it to my priv table
+        ptree.clear();
+        Table t (name_i);
+        t.insert_into(values);
+        _keep_track_table = t;
+        return _keep_track_table;
+    }
+    else if (command == "select")
+    {
+        string name_s = ptree["table_name"][0];
+        Table t (name_s);
+        vector<string> fields = ptree["fields"]; //check for star
+        bool starflag = false;
+        if (fields[0] == "*")
+        {
+            starflag = true;
+        }
+
+        //condition check
+        if (!ptree.contains("condition"))
+        {
+            cout << "There is no condition" << endl;
+            if (starflag == true)
+            {
+                _keep_track_table = t.select_all();
+                _recnos = t.select_recnos();
+                return _keep_track_table;
+            }
+            else
+            {
+                _keep_track_table = t.select(fields);
+                _recnos = t.select_recnos();
+                return _keep_track_table;
+            }
+        }
+        else
+        {
+            vector<string> conditions = ptree["condition"];
+            if (starflag == true)
+            {
+                fields = t.get_fields();
+            }
+            _keep_track_table = t.select(fields, conditions);
+            _recnos = t.select_recnos();
+            return _keep_track_table;
+        }
+    }
+    return _keep_track_table;
 }
 
 
@@ -39,24 +81,16 @@ Table SQL::run_command(string commandstr)
     string pkey;
     vector<string>tempv;
     vector<string>tempvi;
-    // cout << "ptree in run command: " << endl;
-    // cout << ptree << endl;
-    // cout << "using lookup:" << endl;
-    // ptree.print_lookup();
-    // string tbl = "table_name";
-    // string tbl_name = ptree[tbl][0];
-    // cout << "tbl name before anything else: " << tbl_name << endl;
+
 
 
 
     if (commandstr == "make" || commandstr == "create")
     {
-        //make table
-        //if its a table, we need  a name
         pkey = "table_name"; // my field table name will always have this key
         
-        temp = ptree[ pkey].at(0); //shoul only be one line 
-        cout << "in make table: " << temp << endl;
+        temp = ptree[ pkey].at(0); 
+        //cout << "in make table: " << temp << endl;
         pkey = "col";
         tempv = ptree[pkey];
         Table maket (temp, tempv);
@@ -107,14 +141,6 @@ Table SQL::run_command(string commandstr)
         }
         //cout << "in select: " << temp << endl;
         Table t (temp);
-        
-        // get into select
-        // Table (temp);
-        // call a select depending on no conditons/conditions
-        // t.select(pass something in)
-        // my priv table = t.select(pass something in)
-
-        //not all selects will have conditions
         pkey = "condition"; 
         if (!ptree.contains(pkey)) //no conditions means just return all
         {
@@ -134,6 +160,7 @@ Table SQL::run_command(string commandstr)
             }
             
         }
+
 
         // cout << "checking fields: " << endl;
         // for (int i = 0; i < tempv.size(); i++)
