@@ -37,10 +37,7 @@ struct MPair{
     MPair(const K& k, const vector<V>& vlist)
     {
         key = k;
-        for (int i = 0; i < vlist.size(); i++) //insert vector into vector
-        {
-            value_list.push_back(vlist[i]); 
-        }
+        value_list = vlist;
     }
     //--------------------------------------------------------------------------------
 
@@ -168,6 +165,7 @@ public:
 //  Element Access
     const vector<V>& operator[](const K& key) const
     {
+        cout << "goes into const version" << endl;
         MPair<K, V> temp (key);
         return mmap.get(temp).value_list;
     }
@@ -175,6 +173,7 @@ public:
     vector<V>& operator[](const K& key) 
     {
         MPair <K, V> temp (key);
+        
         return mmap.get(temp).value_list;
     }
 

@@ -24,6 +24,7 @@ const int INTO = 21;
 const int VALUES = 22;
 const int LPAREN = 23;
 const int RPAREN = 24;
+const int STAR = 25;
 
 
 

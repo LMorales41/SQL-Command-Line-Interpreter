@@ -82,189 +82,92 @@ bool test_tree(bool debug = false)
 
 bool test_sql(bool debug = false)
 {
-  if (debug){
-    cout << "testB:: test-sub() entering test_sub" << endl;
-  }
-  SQL sql;
-  Table students;
-  Table books;
-  Table orders;
-  Table employees;
-  books = sql.command("make table books fields isbn title author price");
-
-  vectorstr insertlines = 
+  bool debug2 = false;
+  if(debug)
   {
-    "make table employees fields \"employee_id\" name salary",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert employees values 101 \"John Doe\" 50000",
-        "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
+    SQL sql;
+    Table t;
+    Table playerTable;
+    Table clubsTable;
+    vectorstr commands = {
+      "make table players fields fname, lname, age, position, team",
+      "insert into players values Julian, Marin, 17, Winger, \"18AA\"",
+      "insert into players values Adam, Scott, 17, Winger, \"18AA\"",
+      "insert into players values Jared, Padilla, 18, Center, \"18AA\"",
+      "insert into players values Anthony, Aceves, 17, Defense, \"18AA\"",
+      "insert into players values Jayden, Deguzman, 16, Defense, \"16AA\"",
+      "insert into players values Aiden, Zakaria, 16, Center, \"16AA\"",
+      "insert into players values Collin, \"O'Brian\", 15, Winger, \"16AA\"",
+      "insert into players values Rafe, Armstrong, 16, Defense, \"16AA\"",
+      "insert into players values Taiki, Schneider, 16, Winger, \"16AA\"",
+      "insert into players values Garion, Barber, 16, Center, \"16AA\"",
+      "insert into players values Sebastian, Benavente, 16, Winger, \"16AA\"",
+      "insert into players values Liam, Carson, 11, Defense, \"12B\"",
+      "insert into players values Damien, Boucher, 11, Center, \"12B\"",
+      "insert into players values Bella, Gao, 11, Winger, \"12B\"",
+      "insert into players values Reagan, Ludlow, 11, Winger, \"12B\"",
+      "insert into players values Patrick, Guerra, 12, Defense, \"12B\"",
+      "insert into players values Qnoxx, \"Decker-Knealing\", 11, Winger, \"12B\"",
+      "make table clubs fields name, numTeams, championships, \"year founded\"",
+      "insert into clubs values Empire, 10, 06, 2010",
+      "insert into clubs values \"Jr. Kings\", 20, 45, 1996",
+      "insert into clubs values Wave, 16, 25, 2002",
+      "insert into clubs values \"Jr. Ducks\", 22, 40, 1998",
+      "insert into clubs values Bears, 18, 17, 1999",
+      "insert into clubs values \"Maple Leafs\", 08, 03, 2004",
+      "insert into clubs values OC, 12, 08, 2008"
+    };
+    for(int i = 0; i < commands.size(); i++)
+    {
+      cout << ">" << commands[i] << endl;
+      t = sql.command(commands[i]);
+      if(i == 17)
+        playerTable = t;
+      // cout << "__________\n\n" << t << "________\n"; //inserts and makes work
+    }
+    clubsTable = t;
+    cout << playerTable << "______\n\n" << clubsTable << "\n_____\n";
+    vectorstr select_commands = {
+      // "select lname, age, fname from players where lname > G and fname < H or age <= 16"
+      "select * from clubs",
+      "select name from clubs where \"year founded\" <= 2001 and \"year founded\" > 2001",//and
+      "select fname from players where position = Defense or age >= 17 and fName > J",//or and
+      "select fname, lname from players where fname > H and lname < K and position = Defense",//and and
+      "select team, fname from players where fname > J and fname < T or team >= \"16\" and age <= 17",//and or and
+      "select lname, fname, age from players where position = Winger or age >=16 and position = Defense or lname < N",//or and or
+      "select * from players where age > 19 or fname > J",//empty or full solution
+      "select * from players where age <= 17 or fname = Alex",//full or empty
+      "select * from players where age > 19 or fname = Alex",//empty or empty
+      "select * from players where age > 19 and fname > J",//empty and full
+      "select lname, fname, position from players where age <= 17 and fname = Alex",//full and empty
+      "select lname, fname, position from players where age > 18 and fname = Alex",//empty and empty
+      "select lname, fname, position from players where (age <= 16 or fname > J and (lname > D)) and position = Defense"
+    };
 
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-        "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-        "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-        "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-        "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert books values 101 \"John Doe\" 50000, 10",
-    "insert books values 101 \"John Doe\" 50000, 10",
-
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-        "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-        "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-    "insert employees values 101 \"John Doe\" 50000",
-
-    "insert employees values 101 \"John Doe\" 50000"
-    // "insert into employees values 102 \"Jane Smith\" 60000",
-    // "insert into employees values 103 \"Bob Johnson\" 55000",
-    // "create table students fields id name age",
-    // "insert into employees values 104 \"Alice Williams\" 70000",
-    // "insert employees values 105 \"Michael Johnson\" 55000",
-    // "insert into employees values 106 \"Emily Davis\" 62000",
-    // "insert employees values 107 \"Daniel White\" 48000",
-    // "make table books fields isbn title author price",
-    // "insert employees values 108 \"Olivia Martin\" 58000",
-    // "insert employees values 109 \"Matthew Turner\" 65000",
-    // "insert employees values 110 \"Sophia Harris\" 53000",
-    // "create table orders fields \"order_id\" quantity",
-    // "insert employees values 111 \"David Anderson\" 70000",
-    // "insert employees values 112 \"Emma Taylor\" 48000",
-    // "insert employees values 113 \"Christopher Lee\" 72000",
-    // "insert into employees values 114 \"Isabella Wright\" 55000",
-    // "insert into employees values 115 \"Ethan Martinez\" 59000",
-    // "insert employees values 116 \"Ava Rodriguez\" 67000",
-    // "insert employees values 117 \"Mia Clark\" 51000",
-    // "insert employees values 118 \"James Baker\" 63000",
-    // "insert employees values 119 \"Sophie Garcia\" 50000",
-    // "insert employees values 120 \"Logan Smith\" 55000",
-    // "insert employees values 121 \"Grace Walker\" 60000",
-    // "insert employees values 122 \"Jackson Wright\" 54000",
-    // "insert employees values 123 \"Chloe Davis\" 67000",
-    // "insert employees values 124 \"Lucas Taylor\" 52000",
-    // "insert employees values 125 \"Avery Turner\" 48000",
-    // "insert employees values 126 \"Zoe Wilson\" 55000",
-    // "insert employees values 127 \"Caleb Reed\" 71000",
-    // "insert employees values 128 \"Nora Martin\" 59000",
-    // "insert employees values 129 \"Henry Phillips\" 64000",
-    // "insert employees values 130 \"Lily Moore\" 53000"
-
-  };
-  employees = sql.command(insertlines[0]);
-  //testing same entry
-  for (int i = 1; i < insertlines.size(); i++)
-  {
-    sql.command(insertlines[i]);
+    for(int i = 0; i < select_commands.size(); i++)
+    {
+      cout << "\n_____________\n\n" << ">" << select_commands[i] << endl << sql.command(select_commands[i]);
+      cout << sql.select_recnos() << "_________\n\n";
+    }
+    
   }
-  cout << employees << endl;
-  cout << books << endl;
-  // for (int i =1 ; i < insertlines.size(); i++)
-  // {
-  //   if (i == 4 )
-  //   {
-  //     students = sql.command(insertlines[i]);
-  //     i++;
-  //   }
-  //   if (i == 9)
-  //   {
-  //     books = sql.command(insertlines[i]);
-  //     i++;
-  //   }
-  //   if (i == 13)
-  //   {
-  //     orders = sql.command(insertlines[i]);
-  //     i++;
-  //   }
-  //   sql.command(insertlines[i]);
-  // }
-  // cout << employees << endl;
-  // cout << students << endl;
-  // cout << orders << endl;
-  // cout << books << endl;
+
 
 
   return true;
 }
 
-
-
+bool test_one(bool debug = false)
+{
+  Table t ("game", {"name, year, rating"});
+  SQL sql;
+  vectorstr row = {"pokemon", "1986", "E"};
+  t.insert_into(row);
+  
+  string line = "select * from game where year > 2000";
+  cout << sql.command(line) << endl;
+  return true;
+}
 
 TEST(TEST_STUB, TestStub) {
   
@@ -281,13 +184,17 @@ TEST(TEST_STUB, TestStub) {
 // }
 
 
-TEST(TEST_SQL, TestSql) {
+// TEST(TEST_SQL, TestSql) {
   
-  //EXPECT_EQ(0, <your individual test functions are called here>);
+//   //EXPECT_EQ(0, <your individual test functions are called here>);
 
-  EXPECT_EQ(1, test_sql(false));
+//   EXPECT_EQ(1, test_sql(true));
+// }
+
+TEST(TEST_ONE, TestOne)
+{
+  EXPECT_EQ(1, test_one(false));
 }
-
 
 
 

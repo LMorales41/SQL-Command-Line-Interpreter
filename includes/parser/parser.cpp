@@ -110,8 +110,9 @@ void Parser::make_map()
   keywords.insert("fields", FIELDS);
   keywords.insert("values", VALUES);
   keywords.insert("symbol", SYMBOL);
-  keywords.insert("(", LPAREN);
-  keywords.insert(")", RPAREN);
+  keywords.insert("*", STAR);
+  // keywords.insert("(", LPAREN);
+  // keywords.insert(")", RPAREN);
 
   //all commands
   keywords.insert("select", SELECT);
@@ -121,15 +122,15 @@ void Parser::make_map()
   keywords.insert("create", MAKE);
   
   //all relational strings
-  keywords.insert(">", RELATIONAL);
-  keywords.insert("<", RELATIONAL);
-  keywords.insert("=", RELATIONAL);
-  keywords.insert(">=", RELATIONAL);
-  keywords.insert("<=", RELATIONAL);
+  // keywords.insert(">", RELATIONAL);
+  // keywords.insert("<", RELATIONAL);
+  // keywords.insert("=", RELATIONAL);
+  // keywords.insert(">=", RELATIONAL);
+  // keywords.insert("<=", RELATIONAL);
 
   //all logical strings
-  keywords.insert("and", LOGICAL);
-  keywords.insert("or", LOGICAL);
+  // keywords.insert("and", LOGICAL);
+  // keywords.insert("or", LOGICAL);
 
 
 
@@ -141,22 +142,27 @@ void Parser::make_table() //add this back in if it doesnt work -> (int _table[][
     init_table(_table); 
 
     mark_success(_table, 4); //select lname from student ^^
-    mark_success(_table, 8); //select lname from student where age < 10 ^^
-
+    //mark_success(_table, 8); //select lname from student where age < 10 ^^
+    mark_success(_table, 6);
     mark_cell(0, _table, SELECT, 1); //command $select
     mark_cell(1, _table, SYMBOL, 2); //field $lname
+    mark_cell(1, _table, STAR, 2);
     mark_cell(2,_table,  SYMBOL, 2);//if any other fields $fname
     mark_cell (2, _table, FROM, 3 ); //from -useless $from
-    mark_cell (3, _table, SYMBOL, 4);//table_name $student
+    mark_cell (3, _table, SYMBOL, 4);//table_name $student3
     mark_cell (4, _table, WHERE, 5 ); //where -useless $where
-    mark_cell (5, _table, LPAREN, 5);
-    mark_cell (5, _table, SYMBOL, 6); //lhs comparison $age
-    mark_cell (6, _table, RELATIONAL, 7); // >, <, = , <= $<
-    mark_cell (7, _table, SYMBOL, 8); //rhs comparison -complete $10
-    mark_cell (8, _table, RPAREN, 8);
-    mark_cell (8, _table, LOGICAL, 9); //union/intersection sends me back to lhs stage $and
-    mark_cell (9, _table, LPAREN, 9);
-    mark_cell (9, _table, SYMBOL, 6);
+    mark_cell (5, _table, SYMBOL, 6);
+    mark_cell(6, _table, SYMBOL, 6);
+
+    //technically all symbols
+    // mark_cell (5, _table, LPAREN, 5);
+    // mark_cell (5, _table, SYMBOL, 6); //lhs comparison $age
+    // mark_cell (6, _table, RELATIONAL, 7); // >, <, = , <= $<
+    // mark_cell (7, _table, SYMBOL, 8); //rhs comparison -complete $10
+    // mark_cell (8, _table, RPAREN, 8);
+    // mark_cell (8, _table, LOGICAL, 9); //union/intersection sends me back to lhs stage $and
+    // mark_cell (9, _table, LPAREN, 9);
+    // mark_cell (9, _table, SYMBOL, 6);
             //last used is 9
     //make
     mark_success(_table, 14);//make table student fields lname, fname
@@ -215,24 +221,26 @@ mmap_ss Parser::get_parse_tree()
         ptree.insert("fields", strng);
         break;
       case 4:
+        //cout << "checking: " <<strng << endl;
         ptree.insert("table_name", strng);
+        //cout << "checking" <<strng << endl;
         break;
       case 5:
-        if (strng == "(") {ptree.insert("condition", strng); break;}
+        // if (strng == "(") {ptree.insert("condition", strng); break;}
         ptree.insert("where", "yes"); //where moment
         break;
       case 6:
         ptree.insert("condition", strng);
         break;
-      case 7:
-        ptree.insert("condition", strng);
-        break;
-      case 8:
-        ptree.insert("condition", strng);
-        break;
-      case 9:
-        ptree.insert("condition", strng);
-        break;
+      // case 7:
+      //   ptree.insert("condition", strng);
+      //   break;
+      // case 8:
+      //   ptree.insert("condition", strng);
+      //   break;
+      // case 9:
+      //   ptree.insert("condition", strng);
+      //   break;
 
       case 10:
         ptree.insert("command", strng);

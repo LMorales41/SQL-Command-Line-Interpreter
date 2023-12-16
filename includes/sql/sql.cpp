@@ -3,12 +3,13 @@
 Table SQL::command(string commandline)
 {
     //Table t;
-    char s [500];
+    char s [300];
     strcpy(s, commandline.c_str());
     Parser prsr (s);
     ptree = prsr.get_parse_tree();
     string command = ptree["command"][0];
-
+    //cout << "ptree: "<< endl <<ptree << endl;
+    //cout << "name: " <<ptree["table_name"] << endl;
     if (command == "make" || command == "create")
     {
         string name_m =  ptree["table_name"][0];
@@ -33,6 +34,7 @@ Table SQL::command(string commandline)
     }
     else if (command == "select")
     {
+        //cout << ptree << endl;
         string name_s = ptree["table_name"][0];
         Table t (name_s);
         vector<string> fields = ptree["fields"]; //check for star
@@ -45,20 +47,24 @@ Table SQL::command(string commandline)
         //condition check
         if (!ptree.contains("condition"))
         {
+            ptree.clear();
             cout << "There is no condition" << endl;
             if (starflag == true)
             {
                 _keep_track_table = t.select_all();
                 _recnos = t.select_recnos();
+                
                 return _keep_track_table;
             }
             else
             {
                 _keep_track_table = t.select(fields);
+                cout << ptree << endl;
                 _recnos = t.select_recnos();
                 return _keep_track_table;
             }
         }
+
         else
         {
             vector<string> conditions = ptree["condition"];
@@ -66,6 +72,7 @@ Table SQL::command(string commandline)
             {
                 fields = t.get_fields();
             }
+            ptree.clear();
             _keep_track_table = t.select(fields, conditions);
             _recnos = t.select_recnos();
             return _keep_track_table;

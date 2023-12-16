@@ -457,7 +457,6 @@ void BPlusTree<T>::print_tree(int level, ostream& outs) const
 template<typename T>
 BPlusTree<T>::BPlusTree(bool dups_ok)
 {
-    this->dups_ok = dups_ok;
     data_count = 0;
     child_count = 0;
     next = nullptr;
@@ -703,6 +702,7 @@ T& BPlusTree<T>::get(const T& entry)
     }
     else 
     {
+        cout << "checks in here" << entry << endl;
         insert(entry);
         return get_existing(entry);
         //return *(find_ptr(entry));
@@ -744,6 +744,7 @@ const T* BPlusTree<T>::find_ptr(const T& entry) const
     {
         if (here < data_count && data[here] == entry)
         {
+            //cout << "wat b here: " << *(&data[here]) << endl;
             return &data[here];
         }
     }
