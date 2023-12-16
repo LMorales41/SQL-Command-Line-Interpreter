@@ -781,22 +781,21 @@ void BPlusTree<T>::copy_tree(const BPlusTree<T>& other, BPlusTree<T>*& last_node
 template<typename T>
 bool BPlusTree<T>::contains(const T& entry) const
 {
-    //cout << "i go in here" << endl;
+
     int index = first_ge(data, data_count, entry);
-    //cout << "data[index]:" << data[index] << endl;
-    //bool found = index < data_count && data[index] == entry;
-    //cout << "goes into contain" << endl;
+
     if (is_leaf())
     {
-        //return data[index] == entry;
-        if (data[index] == entry)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return data[index] == entry;
+        //if anything breaks it was here
+        // if (data[index] == entry)
+        // {
+        //     return true;
+        // }
+        // else
+        // {
+        //     return false;
+        // }
     }
     else if (data[index] == entry)
     {
@@ -812,53 +811,19 @@ bool BPlusTree<T>::contains(const T& entry) const
 template<typename T>
 bool BPlusTree<T>::contains(const T& entry) 
 {
-    // int index = first_ge(data, data_count, entry);
-    // //bool found = index < data_count && data[index] == entry;
-    // //cout << "goes into contain" << endl;
-    // if (is_leaf())
-    // {
-    //     if (data[index] == entry)
-    //     {
-    //         return true;
-    //     }
-    //     else
-    //     {
-    //         return false;
-    //     }
-    // }
-    // else if (data[index] == entry)
-    // {
-    //     return true;
-    // }
-    // else
-    // {
-    //     return subset[index]->contains(entry);
-    // }
+    int index = first_ge(data, data_count, entry);
 
-
-
-    //this is to make const work, if i want to return to a semi-working state then erase const and uncomment this part
-
-    // if (find_ptr(entry) == nullptr)
-    // {
-    //     //cout << "its nullptr" << endl;
-    //     return false;
-    // }
-    // else 
-    // {
-    //     //cout << "its not nullptr" << endl;
-    //     return true;
-    // }
-
-    if (find_ptr(entry) != nullptr)
+    if (is_leaf())
     {
-        //cout << "says that something was found" << endl;
+        return data[index] == entry;
+    }
+    else if (data[index] == entry)
+    {
         return true;
     }
-    else 
+    else
     {
-        //cout << "does not say something was found" << endl;
-        return false;
+        return subset[index]->contains(entry);
     }
 }              
 //true if entry can be found in
