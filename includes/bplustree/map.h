@@ -111,7 +111,7 @@ public:
     {
         return map.begin();
     }
-    Iterator end()
+    typename Map<K,V>::Iterator end()
     {
         return map.end();
     }
@@ -171,12 +171,12 @@ public:
     }
 
 //  Operations:
-    Iterator find(const K& key)
+    typename Map<K,V>::Iterator find(const K& key)
     {
         Pair <K, V> temp(key);
         //cout << "in maps find" << endl;
-        Iterator found (map.find(temp));
-        return found;
+        return Map<K, V>::Iterator found (map.find(temp));
+        //return found;
     }
     bool contains(const Pair<K, V>& target) const
     {

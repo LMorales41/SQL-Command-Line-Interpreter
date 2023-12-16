@@ -118,23 +118,22 @@ public:
     void copy_tree(const BPlusTree<T>& other);      //copy other into this object
     void copy_tree(const BPlusTree<T>& other, BPlusTree<T>*& last_node);
 
-    bool contains(const T& entry);              //true if entry can be found in
-                                                //                  the array
+    bool contains(const T& entry);              //true if entry can be found in the array
     bool contains (const T& entry) const;
     T& get(const T& entry);                     //return a reference to entry
-                                                //                  in the tree
+//                  in the tree
     const T& get(const T& entry)const;   //return a reference to entry
     T& get_existing(const T& entry);     //return a reference to entry
     T* find_ptr(const T& entry);                    //return a pointer to this key.
                                                 //          NULL if not there.
+    const T* find_ptr(const T& entry) const;
     
-    
-    Iterator find (const T& key)
+    typename BPlusTree<T>::Iterator find (const T& key)
     {
         if (!contains(key))
         {
-            Iterator notHere(NULL);
-            return notHere;
+            //Iterator notHere(NULL);
+            return BPlusTree<T>::Iterator notHere(NULL);
         }
         else
         {
@@ -154,7 +153,7 @@ public:
     }         
     //return an iterator to this key.
     //     NULL if not there.
-    Iterator lower_bound(const T& key)
+    typename BPlusTree<T>::Iterator lower_bound(const T& key)
     {
 
         int count = 0;
@@ -167,12 +166,12 @@ public:
                 return i;
             }
         }
-        return Iterator(NULL);
+        return BPlusTree<T>::Iterator(NULL);
     }  
     //return first that goes NOT BEFORE
     // key entry or next if does not
     // exist: >= entry
-    Iterator upper_bound(const T& key)
+    typename BPlusTree<T>::Iterator upper_bound(const T& key)
     {
         for (Iterator i = begin(); i != end(); i++)
         {
@@ -183,18 +182,17 @@ public:
                 return i;
             }   
         }
-        return NULL;
+        return BPlusTree<T>::NULL;
     }  
     //return first that goes AFTER key
-    Iterator begin() // works fine
+    typename BPlusTree<T>::Iterator begin() // works fine
     {
 
-        Iterator iter(get_smallest_node());
-        return iter;
+        return BPlusTree<T>::Iterator iter(get_smallest_node());
     }
-    Iterator end()
+    typename BPlusTree<T>::Iterator end()
     {
-        return Iterator(NULL);
+        return BPlusTree<T>::Iterator(NULL);
     }
                                          //exist or not, the next entry  >entry
     int size() const;                           //count the number of elements
@@ -804,6 +802,36 @@ T* BPlusTree<T>::find_ptr(const T& entry)
 //return a pointer to this key.
 // NULL if not there.
 
+template <typename T>
+const T* BPlusTree<T>::find_ptr(const T& entry) const
+{
+    T temp;
+    int here = first_ge(data, data_count, entry); //index to check
+    bool found = here < data_count && data[here] == entry;
+    //cout << "here in find:" << here << endl;
+    //cout << " data: " << data[here] << " ";
+    if ( is_leaf() && here < data_count ) 
+    {
+        //cout << "recognized as a leaf" << endl;
+        //cout << data[here] << endl;
+        if (data[here] == entry)
+        { 
+            // address @ data[here]
+            return &data[here];
+            //return temp;
+        }
+
+    }
+    else if (here <= data_count && is_leaf() == false)
+    {
+        return subset[here+found]->find_ptr(entry);
+        /*if (data[here] != entry])
+        {
+            return subset[here]->find(entry);
+        }*/
+    }
+    return nullptr;
+}
 
 
 template<typename T>
@@ -886,6 +914,7 @@ void BPlusTree<T>::loose_insert(const T& entry)
 
     if (is_leaf())
     {
+
         //cout << "entry: " << entry << endl;
         if (found == true && data[index] == entry)
         //if found, simply override <- dont do 
@@ -902,39 +931,12 @@ void BPlusTree<T>::loose_insert(const T& entry)
         return;
     }
     subset[index+found]->loose_insert(entry);
-    /*cout << "data test before fix_excess: ";
-    cout << "subset: ";
-    cout << "dc subset: " << subset[index+found]->data_count << endl;
-    for (int i = 0; i < subset[index+found]->data_count; i++)
-    {
-        cout << subset[index+found]->data[i] << " ";
-    }*/
-    //cout << endl;
-    //cout << "inside myself: ";
-    //cout << "dc myself: " << data_count << endl;
-    //for (int i = 0; i < data_count; i++)
-    //{
-    //    cout << data[i] << " ";
-    //}
-    //cout << endl;
-    //cout << "fixing at subset: " << index+found << endl;
+
     if (subset[index+found]->data_count > MAXIMUM)
     {
         fix_excess(index+found);
     }
-    //fix_excess(index+found);
-    //subset[index+found]->fix_excess();
-    //cout << "dc:" << data_count << endl;
-    // if (subset[index]->data_count > MAXIMUM)
-    // {
-    //     fix_excess(index);
-    // }
 
-    // if (subset[index+found]->data_count > MAXIMUM && subset[index+found]->is_leaf())
-    // {
-    //     //cout << "hi" << endl;
-    //     fix_excess(index+found);
-    // }
     return;
 }          
 //allows MAXIMUM+1 data
@@ -1019,12 +1021,10 @@ void BPlusTree<T>::loose_remove(const T& entry)//entry will always be valid
 
     else if (!is_leaf() && data[here] == entry && here < data_count) //here calls remove_max to deal with it being inner_node or root
     {
-        //cout <<"hits here before seg fault" << endl;
-        // cout << "BEFORE RB, CC: " << child_count << endl;
-        // cout << "CUM moment\n";
+
         subset[here]->remove_biggest(temp); 
         data[here] = temp; //necessary? works?
-        // cout << "after RB, CC: " << child_count << endl;
+
     }
 
     else//recurse 
@@ -1034,9 +1034,7 @@ void BPlusTree<T>::loose_remove(const T& entry)//entry will always be valid
 
     }
 
-    // cout << "rb: " << child_count << endl;
-    // cout << "CALLING FS FROM LR:\n";
-    // cout << "CC: " << child_count << endl;
+
     
     return;
 }          
@@ -1047,9 +1045,7 @@ void BPlusTree<T>::loose_remove(const T& entry)//entry will always be valid
 template<typename T>                                            
 void BPlusTree<T>::fix_shortage(int i)
 {
-    // cout << "FS:\n";
-    // cout << "SCC:"  << child_count << endl;
-    // cout << "SDC: " << subset[i]->data_count << endl;
+
     if (subset[i]->data_count >= MINIMUM)
     {
         // cout << "subset" << i << "has sufficient data members and has returned" << endl;
