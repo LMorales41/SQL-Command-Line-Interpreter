@@ -133,7 +133,7 @@ public:
         if (!contains(key))
         {
             //Iterator notHere(NULL);
-            return BPlusTree<T>::Iterator notHere(NULL);
+            return BPlusTree<T>::Iterator(NULL);
         }
         else
         {
@@ -182,13 +182,13 @@ public:
                 return i;
             }   
         }
-        return BPlusTree<T>::NULL;
+        return NULL;
     }  
     //return first that goes AFTER key
     typename BPlusTree<T>::Iterator begin() // works fine
     {
-
-        return BPlusTree<T>::Iterator iter(get_smallest_node());
+        BPlusTree<T>::Iterator iter(get_smallest_node());
+        return iter;
     }
     typename BPlusTree<T>::Iterator end()
     {
@@ -511,8 +511,6 @@ void BPlusTree<T>::print_tree(int level, ostream& outs) const
 template<typename T>
 BPlusTree<T>::BPlusTree(bool dups_ok)
 {
-    T temp;
-    data[0] = temp;
     this->dups_ok = dups_ok;
     data_count = 0;
     child_count = 0;

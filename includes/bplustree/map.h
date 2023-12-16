@@ -175,7 +175,7 @@ public:
     {
         Pair <K, V> temp(key);
         //cout << "in maps find" << endl;
-        return Map<K, V>::Iterator found (map.find(temp));
+        return Map<K, V>::Iterator (map.find(temp));
         //return found;
     }
     bool contains(const Pair<K, V>& target) const
