@@ -552,6 +552,7 @@ BPlusTree<T>::~BPlusTree()
 template<typename T>
 BPlusTree<T>& BPlusTree<T>::operator =(const BPlusTree<T>& RHS)
 {
+    clear_tree();
     copy_tree(RHS);
     return *this;
 }
@@ -653,7 +654,7 @@ void BPlusTree<T>::copy_tree(const BPlusTree<T>& other)
 {
     //cout << "orig data[0]: " << other.data[0] << endl;
     //move into other copy
-    
+    clear_tree(); //student keeps on showing up just clear on every copy
     BPlusTree<T> *temp = nullptr;
     copy_tree (other, temp);
 

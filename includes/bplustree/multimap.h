@@ -216,11 +216,11 @@ public:
         //return nullptr;
     }
 
-    Iterator find(const K& key)
+    typename MMap<K, V>::Iterator find(const K& key)
     {
         MPair <K, V> temp (key);
-        Iterator it (mmap.find(key));
-        return it;
+        return MMap<K, V>::Iterator((mmap.find(key)));
+        // return it;
     }
     int count(const K& key)
     {
@@ -245,16 +245,16 @@ public:
     //    lower_bound
     //    upper_bound
     //    equal_range:
-    Iterator lower_bound(K& key)
+    typename MMap<K,V>::Iterator lower_bound(K& key)
     {
         MPair<K, V> temp (key);
-        return mmap.lower_bound(temp);
+        return MMap<K,V>::Iterator(mmap.lower_bound(temp));
     }
-    Iterator upper_bound (K& key)
+    typename MMap<K, V>::Iterator upper_bound (K& key)
     {
         MPair <K, V> temp (key);
         //cout << "UB in mmap: " << temp << endl;
-        return mmap.upper_bound(temp);
+        return MMap<K, V>::Iterator(mmap.upper_bound(temp));
     }
     Iterator equal_range(int key)
     {

@@ -674,7 +674,7 @@ void Table::make_file()
     // r2.read(f, _recno);
     // cout << "r2 read: " << r2 << endl;
     // f.close();
-    // serial++;
+    serial++;
 }
 
 void Table::make_structures()

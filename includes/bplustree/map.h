@@ -107,13 +107,13 @@ public:
         key_count = 0;
     }
 //  Iterators
-    Iterator begin()
+    typename Map <K,V>::Iterator begin()
     {
         return map.begin();
     }
     typename Map<K,V>::Iterator end()
     {
-        return map.end();
+        return Map<K,V>::Iterator(map.end());
     }
 
 //  Capacity
@@ -200,12 +200,12 @@ public:
         return it;
     }*/
 
-    Iterator upper_bound(K& key)
+    typename Map<K,V>::Iterator upper_bound(K& key)
     {
         Pair<K, V> temp(key);
-        return map.upper_bound(key);
+        return Map<K, V>::Iterator(map.upper_bound(key));
     }
-    Iterator lower_bound(K& key)
+    typename Map<K,V>::Iterator lower_bound(K& key)
     {
         Pair <K, V> temp(key);
         // Pair<K, V> check;
@@ -225,7 +225,7 @@ public:
         // cout << "here?" << endl;
         // Iterator itr = end();
         // return itr;
-        return map.lower_bound(temp);
+        return Map<K,V>::Iterator(map.lower_bound(temp));
     }
     bool is_valid(){return map.is_valid();}
 

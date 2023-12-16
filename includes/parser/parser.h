@@ -23,25 +23,25 @@ class Parser
             if (map_table_initialized == false)
             {
                 make_table();
-                make_map();
+                // make_map();
                 map_table_initialized = true;
             }
+            make_map();
 
         }
         Parser(char* s);
         vector<string> tokenize(char* s); // returns the non edited string vector 
         void make_table();
         void make_map();
-        void get_parse_tree();
+        mmap_ss get_parse_tree();
         mmap_ss parse_tree();
         void set_string(char* s);
-        mmap_ss ptree;
         vector <string> input_q; //tokenized vector of strings from the char array we are handed
         string removeQuotes(string& original);
 
     private:
         static bool map_table_initialized;
-        static Map<string, int> keywords; //string =  keyword, int = column # for that keyword
+        Map<string, int> keywords; //string =  keyword, int = column # for that keyword
         //mmap_ss ptree; //keyword = string, value returned = string
         static int _table[MAX_ROWS][MAX_COLUMNS]; //state machine
 

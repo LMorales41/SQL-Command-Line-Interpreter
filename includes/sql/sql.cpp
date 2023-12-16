@@ -3,6 +3,7 @@
 Table SQL::command(string commandline)
 {
     //Table t;
+    ptree.clear();
     char s [500];
     strcpy(s, commandline.c_str());
     Parser prsr (s);
@@ -10,7 +11,7 @@ Table SQL::command(string commandline)
     //cout << "issue with table?" << endl;
     //prsr.get_parse_tree();
     // ptree.clear();
-    ptree = prsr.parse_tree();
+    ptree = prsr.get_parse_tree();
     //cout << "issue here?" << endl;
     // cout << "ptree in command :" << endl;
     // cout << ptree << endl;

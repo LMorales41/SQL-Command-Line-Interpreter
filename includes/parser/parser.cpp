@@ -1,21 +1,22 @@
 #include "parser.h"
 
 int Parser::_table[MAX_ROWS][MAX_COLUMNS];
-Map<string, int> Parser::keywords;
+// Map<string, int> Parser::keywords;
 bool Parser::map_table_initialized = false;
 
 Parser::Parser(char* s)
 {
   if (map_table_initialized == false)
   {
-    make_map();
+    // make_map();
     make_table();
     map_table_initialized = true;
   }
-
+  make_map(); //not doing this static for a change
   tokenize(s);
   //cant static this one bc it changes every time
-  get_parse_tree();
+  //return this instead? can fix issues
+  //get_parse_tree();
 
 }
 
@@ -24,9 +25,9 @@ void Parser::set_string(char* s)
   //same thing as constructorly nearly
   tokenize(s);
   //destroy whatever tree we had before
-  ptree.clear();
+  //ptree.clear();
 
-  get_parse_tree();
+  // get_parse_tree();
 }
 
 vector<string> Parser::tokenize(char* s)
@@ -198,9 +199,10 @@ void Parser::make_table() //add this back in if it doesnt work -> (int _table[][
 }
 
 
-void Parser::get_parse_tree()
+mmap_ss Parser::get_parse_tree()
 {
   string strng;
+  mmap_ss ptree;
   int state = 0;
   int column;
   for (int i = 0; i < input_q.size(); i++)
@@ -271,10 +273,12 @@ void Parser::get_parse_tree()
         break;
     }
   }
+  return ptree;
 }
 
 mmap_ss Parser::parse_tree()
-{
+{//junk func
+  mmap_ss ptree;
   return ptree;
 }
 
