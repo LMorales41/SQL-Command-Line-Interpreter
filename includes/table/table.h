@@ -100,11 +100,13 @@ public:
         outs << endl;
         return outs;
         }
+
+    vectorstr fieldNames;
     Map <string, long> fieldMap;
     vector<MMap<string, long>> indices;
-    vectorstr fieldNames;
 
 private:    
+
     string name;
     vector <long> recnos;
     bool empty;

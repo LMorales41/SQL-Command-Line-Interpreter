@@ -317,8 +317,10 @@ Table Table::select(vectorstr fields, Queue<Token*> post)
     //cout << "size of fields that I am being handed: " << fields.size() <<endl;
 
     RPN rpn1(post);
-    rpn1.do_rpn_thing(fieldMap,indices);
-    
+
+    rpn1.do_rpn_thing(fieldMap,indices); //not possible to not pass by reference
+    //if i dont pass by reference, indices get sloppy
+
     vector<long> field_recnos = rpn1.get_solution();
     sort(field_recnos.begin(), field_recnos.end());
 
