@@ -213,7 +213,7 @@ public:
     {
         V temp;
         MPair<K, V> get_this (key, temp);
-        return mmap.get(get_this);
+        return mmap.get(key).value_list;
 
         //return nullptr;
     }

@@ -9,7 +9,8 @@ Table SQL::command(string commandline)
     ptree = prsr.get_parse_tree();
     string command = ptree["command"][0];
     //cout << "ptree: "<< endl <<ptree << endl;
-    //cout << "name: " <<ptree["table_name"] << endl;
+    // cout << "name w get: " << ptree.get("table_name") << endl;
+    // cout << "name: " <<ptree["table_name"] << endl;
     if (command == "make" || command == "create")
     {
         string name_m =  ptree["table_name"][0];
@@ -35,7 +36,8 @@ Table SQL::command(string commandline)
     else if (command == "select")
     {
         //cout << ptree << endl;
-        string name_s = ptree["table_name"][0];
+        //string name_s = ptree["table_name"][0];
+        string name_s = ptree.get("table_name").at(0);
         Table t (name_s);
         vector<string> fields = ptree["fields"]; //check for star
         bool starflag = false;
