@@ -695,10 +695,9 @@ T& BPlusTree<T>::get(const T& entry)
     }
     else 
     {
-        cout << "checks in here" << entry << endl;
+        //cout << "checks in here" << entry << endl;
         insert(entry);
         return get_existing(entry);
-        //return *(find_ptr(entry));
     }
     
 }                     
