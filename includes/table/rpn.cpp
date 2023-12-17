@@ -67,47 +67,33 @@ void RPN::do_rpn_thing(Map <string, long>& fieldMap, vector<MMap<string, long>>&
             //cout << "temp: " << temp->get_string() << endl;
             if (temp->get_string() == "and") //intersection
             {
-                //cout << "intersection" << endl;
                 l1 = temp2->get_records();
                 l2 = temp3->get_records();
-                // cout << "l1: " << l1.size() << endl;
-                // cout << "l2: " << l2.size() << endl;
-                // cout << "elements inside l1 : " << endl;
-                // for (int z = 0; z < l1.size(); z++)
-                // {
-                //     cout << l1[z] << " ";
-                // }
-                // cout << endl;
-                // cout << "elements inside l2 : " << endl;
-                // for (int z = 0; z < l2.size(); z++)
-                // {
-                //     cout << l2[z] << " ";
-                // }
-                // cout << endl;
+
                 
                 for (int j = 0; j < l2.size(); j++) //goes through first vector
                 {
 
-                    //cout << "iterating thru l2: " << l2[j] << endl;
                     for (int k = 0; k < l1.size(); k++) //anything that matches shuold be added
                     {
-                        //cout << "iterating thru l1" << l1[k] << endl;
+
                         if (l1[k] == l2[j]) 
                         {
                             l3.push_back(l2[j]); //l3 =  intersection
                         }
                     }
                 }
-                // cout << "l3 size : " << endl;
-                // cout << l3.size() << endl;
-                // for (int z = 0; z < l3.size(); z++)
-                // {
-                //     cout << l3[z] << " ";
-                // }
-                // cout << endl;
-                //this puts intersection into the stack
                 temp = new Solution (l3);
                 solutionholder.push(temp);
+
+                // cout << "field1: " <<temp2->get_string() << endl;
+                // cout << "field2: " << temp3->get_string() << endl;
+                // cout << "l3:" << endl;
+                // for (int p = 0; p < l3.size(); p++)
+                // {
+                //     cout << l3[p] << " ";
+                // }
+                // cout << endl;
 
 
             }
@@ -220,12 +206,6 @@ vector<long> RPN::check_recnos (Map <string, long>& fieldMap, vector<MMap<string
 
     }
 
-    cout<< "for field: " << field << endl;
-    for (int i = 0; i < field_recnos.size(); i++)
-    {
-        cout << field_recnos[i] << " ";
-    }
-    cout << endl;
 
     return field_recnos;
 }
