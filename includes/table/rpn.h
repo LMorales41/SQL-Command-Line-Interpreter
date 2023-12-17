@@ -35,7 +35,8 @@ class RPN
         vector<long> get_solution(); 
         
         vector<long> check_recnos(Map <string, long>& fieldMap, vector<MMap<string, long>>& indices, string field, string oper, string otherField);
-        
+        vector<long> or_function(vector<long> first, vector<long> second);
+        vector<long> and_function(vector<long> first, vector<long> second);
     private:
         Queue<Token *> postfix; //this will be handed to me by shunting yard
                             //it is rpns job to handle this part

@@ -69,31 +69,58 @@ void RPN::do_rpn_thing(Map <string, long>& fieldMap, vector<MMap<string, long>>&
             {
                 l1 = temp2->get_records();
                 l2 = temp3->get_records();
+                cout << "l1:" << endl;
 
-                
-                for (int j = 0; j < l2.size(); j++) //goes through first vector
+                for (int u = 0; u < l1.size(); u++)
                 {
-
-                    for (int k = 0; k < l1.size(); k++) //anything that matches shuold be added
+                    cout << l1[u] << " ";
+                }
+                cout << endl;
+                cout << "l2:" << endl;
+                for (int u = 0; u < l2.size(); u++)
+                {
+                    cout << l2[u] << " ";
+                }
+                cout << endl;
+                //shitty code
+                if (l2.size() > l1.size())
+                {
+                    for (int j = 0; j < l2.size(); j++) //goes through first vector
                     {
-
-                        if (l1[k] == l2[j]) 
+                        for (int k = 0; k < l1.size(); k++) //anything that matches shuold be added
                         {
-                            l3.push_back(l2[j]); //l3 =  intersection
+
+                            if (l1[k] == l2[j]) 
+                            {
+                                l3.push_back(l2[j]); //l3 =  intersection
+                            }
                         }
                     }
                 }
+                else 
+                {
+                    for (int j = 0; j < l1.size(); j++) //goes through first vector
+                    {
+                        for (int k = 0; k < l2.size(); k++) //anything that matches shuold be added
+                        {
+
+                            if (l1[j] == l2[k]) 
+                            {
+                                l3.push_back(l2[k]); //l3 =  intersection
+                            }
+                        }
+                    }
+                }
+
                 temp = new Solution (l3);
                 solutionholder.push(temp);
 
-                // cout << "field1: " <<temp2->get_string() << endl;
-                // cout << "field2: " << temp3->get_string() << endl;
-                // cout << "l3:" << endl;
-                // for (int p = 0; p < l3.size(); p++)
-                // {
-                //     cout << l3[p] << " ";
-                // }
-                // cout << endl;
+                cout << "l3:" << endl;
+                for (int p = 0; p < l3.size(); p++)
+                {
+                    cout << l3[p] << " ";
+                }
+                cout << endl;
 
 
             }
@@ -102,38 +129,10 @@ void RPN::do_rpn_thing(Map <string, long>& fieldMap, vector<MMap<string, long>>&
                 //cout << "union" << endl;
                 l1 = temp2->get_records();
                 l2 = temp3->get_records();
-                if (l1.size() == 0)
-                {
-                    l3 = l2;
-                    temp = new Solution(l3);
-                    solutionholder.push(temp);
-                }
-                else if (l2.size() == 0)
-                {
-                    l3 = l1;
-                    temp = new Solution(l3);
-                    solutionholder.push(temp);
-                }
-                else if (l1.size()==0 && l2.size() == 0)
-                {
-                    temp = new Solution(l3);
-                    solutionholder.push(temp);
-                }
-                else
-                { 
-                    for (int z = 0; z < l2.size(); z++)
-                    {
-                        l3.push_back(l2[z]);
-                    }
-                    sort(l3.begin(), l3.end());
-                    auto last = std::unique(l3.begin(), l3.end()); //last will be itr where the dups are pushed to
-                    l3.erase(last, l3.end()); //erases starting at last to end of vector
+                l3 = or_function(l1, l2);
 
-                    temp = new Solution (l3);
-                    solutionholder.push(temp);
-                }
-
-
+                temp = new Solution (l3);
+                solutionholder.push(temp);
             }
         }
         else 
@@ -237,4 +236,64 @@ vector<long> RPN::check_recnos (Map <string, long>& fieldMap, vector<MMap<string
 vector<long> RPN::get_solution() //pops last value in solutionholder and returns that Solution's vectorlong
 {
     return sltn.get_records();
+}
+
+
+
+vector <long> RPN::or_function(vector<long> first, vector<long> second)
+{
+    vector<long> myunion;
+    //cases first
+    if (first.size() == 0)
+    {
+        myunion = second;
+        return myunion;
+    }
+    else if (second.size() == 0)
+    {
+        myunion = first;
+        return myunion;
+    }
+    else if (first.size()==0 && second.size() == 0)
+    {
+        return myunion;
+    }
+    else
+    { 
+        bool flag = false;
+        for (int z = 0; z < first.size(); z++)
+        {   
+            myunion.push_back(first[z]);
+        }
+        for (int i = 0; i < second.size(); i++)
+        {
+            for (int j = 0; j< myunion.size(); j++)
+            {
+                if (second[i] == myunion[j]) //iterates through entire vector if true thenn
+                {
+                    flag = true;
+                }
+            }
+
+            //only push back if not found (no matchings)
+            if (flag == true)
+            {
+                //myunion.push_back(second[i]);
+                flag = false;
+            }
+            else
+            {
+                myunion.push_back(second[i]);
+            }
+        }
+
+        return myunion;
+    }
+
+    return myunion;
+}
+
+vector<long> RPN::and_function(vector<long> first, vector<long> second)
+{
+    vector<long> intersection;
 }

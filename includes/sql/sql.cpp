@@ -8,7 +8,7 @@ Table SQL::command(string commandline)
     Parser prsr (s);
     ptree = prsr.get_parse_tree();
     string command = ptree["command"][0];
-    cout << "ptree: "<< endl <<ptree << endl;
+    //cout << "ptree: "<< endl <<ptree << endl;
     // cout << "name w get: " << ptree.get("table_name") << endl;
     // cout << "name: " <<ptree["table_name"] << endl;
     if (command == "make" || command == "create")
