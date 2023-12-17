@@ -73,16 +73,16 @@ void shunting_yard::turn_into_postfix() //please
             }
             else
             {       //
-                if (temp->get_precedence() < rlstack.top()->get_precedence())
-                {
+
+                //to keep checking whats under
+                while ( !rlstack.empty() && (temp->get_precedence() < rlstack.top()->get_precedence()))
+                {  
                     temp2 = rlstack.pop();
-                    rlstack.push(temp);
+                    //rlstack.push(temp);
                     postfix.push(temp2);
+
                 }
-                else 
-                {
-                    rlstack.push(temp);
-                }
+                rlstack.push(temp);
             }
             
         }

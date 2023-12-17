@@ -374,8 +374,11 @@ Table Table::select(vectorstr fields, vectorstr conditions)
     shunting_yard sy1(conditions);
     //sy1.print_queue();
     Queue<Token*> post = sy1.get_postfix();
-
+    // cout << "my postfix: " << endl;
+    // sy1.print_queue();
+    // cout << endl;
     RPN rpn1(post);
+
     rpn1.do_rpn_thing(fieldMap,indices);
 
     vector<long> field_recnos = rpn1.get_solution();

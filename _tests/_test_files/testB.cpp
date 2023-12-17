@@ -147,7 +147,7 @@ bool test_sql(bool debug = false)
 
     for(int i = 0; i < select_commands.size(); i++)
     {
-      cout << "\n_____________\n\n" << ">" << select_commands[i] << endl << sql.command(select_commands[i]);
+      cout << "\n_____________\n\n" << ">" << select_commands[i] << endl<<sql.command(select_commands[i]);
       cout << sql.select_recnos() << "_________\n\n";
     }
     

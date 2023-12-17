@@ -64,71 +64,28 @@ void RPN::do_rpn_thing(Map <string, long>& fieldMap, vector<MMap<string, long>>&
             vector<long> l1,l2, l3;
             temp2 = solutionholder.pop();
             temp3 = solutionholder.pop();
+            
             //cout << "temp: " << temp->get_string() << endl;
             if (temp->get_string() == "and") //intersection
             {
                 l1 = temp2->get_records();
                 l2 = temp3->get_records();
-                cout << "l1:" << endl;
-
-                for (int u = 0; u < l1.size(); u++)
-                {
-                    cout << l1[u] << " ";
-                }
-                cout << endl;
-                cout << "l2:" << endl;
-                for (int u = 0; u < l2.size(); u++)
-                {
-                    cout << l2[u] << " ";
-                }
-                cout << endl;
-                //shitty code
-                if (l2.size() > l1.size())
-                {
-                    for (int j = 0; j < l2.size(); j++) //goes through first vector
-                    {
-                        for (int k = 0; k < l1.size(); k++) //anything that matches shuold be added
-                        {
-
-                            if (l1[k] == l2[j]) 
-                            {
-                                l3.push_back(l2[j]); //l3 =  intersection
-                            }
-                        }
-                    }
-                }
-                else 
-                {
-                    for (int j = 0; j < l1.size(); j++) //goes through first vector
-                    {
-                        for (int k = 0; k < l2.size(); k++) //anything that matches shuold be added
-                        {
-
-                            if (l1[j] == l2[k]) 
-                            {
-                                l3.push_back(l2[k]); //l3 =  intersection
-                            }
-                        }
-                    }
-                }
+                //pretty vectors make my debugger go wow! what a wonderful world
+                sort(l1.begin(), l1.end());
+                sort(l2.begin(), l2.end());
+                l3 = and_function(l1, l2);
 
                 temp = new Solution (l3);
                 solutionholder.push(temp);
-
-                cout << "l3:" << endl;
-                for (int p = 0; p < l3.size(); p++)
-                {
-                    cout << l3[p] << " ";
-                }
-                cout << endl;
-
-
             }
             else //union
             {
                 //cout << "union" << endl;
                 l1 = temp2->get_records();
                 l2 = temp3->get_records();
+                //viewbot porpoises
+                sort(l1.begin(), l1.end());
+                sort(l2.begin(), l2.end());
                 l3 = or_function(l1, l2);
 
                 temp = new Solution (l3);
@@ -242,21 +199,33 @@ vector<long> RPN::get_solution() //pops last value in solutionholder and returns
 
 vector <long> RPN::or_function(vector<long> first, vector<long> second)
 {
+    //cout << "inside or func" << endl;
     vector<long> myunion;
     //cases first
+    // cout << "first:" << endl;
+    // for (int u = 0; u < first.size(); u++)
+    // {
+    //     cout << first[u] << " ";
+    // }
+    // cout << endl;
+    // cout << "second:" << endl;
+    // for (int u = 0; u < second.size(); u++)
+    // {
+    //     cout << second[u] << " ";
+    // }
     if (first.size() == 0)
     {
         myunion = second;
-        return myunion;
+        // return myunion;
     }
     else if (second.size() == 0)
     {
         myunion = first;
-        return myunion;
+        // return myunion;
     }
     else if (first.size()==0 && second.size() == 0)
     {
-        return myunion;
+        // return myunion;
     }
     else
     { 
@@ -267,15 +236,16 @@ vector <long> RPN::or_function(vector<long> first, vector<long> second)
         }
         for (int i = 0; i < second.size(); i++)
         {
+            //myunion.push_back(second[i]);
             for (int j = 0; j< myunion.size(); j++)
             {
                 if (second[i] == myunion[j]) //iterates through entire vector if true thenn
                 {
                     flag = true;
                 }
-            }
+                    //only push back if not found (no matchings)
 
-            //only push back if not found (no matchings)
+            }
             if (flag == true)
             {
                 //myunion.push_back(second[i]);
@@ -285,15 +255,90 @@ vector <long> RPN::or_function(vector<long> first, vector<long> second)
             {
                 myunion.push_back(second[i]);
             }
+
+
         }
 
-        return myunion;
-    }
 
+        //filter_repeats(myunion);
+        // return myunion;
+    }
+    // cout << endl <<"myunion: " << endl;
+    // for (int i =0 ;i< myunion.size();i++)
+    // {
+    //     cout << myunion[i] <<  " ";
+    // }
+    // cout << endl;
+    //for easier debug
+    sort(myunion.begin(), myunion.end());
     return myunion;
 }
 
 vector<long> RPN::and_function(vector<long> first, vector<long> second)
 {
+    //cout << "inside and func" << endl;
     vector<long> intersection;
+
+    //cout << endl;
+    //shitty code
+    
+    get_bigger_first(first, second);
+    //cout << "first:" << endl;
+    // for (int u = 0; u < first.size(); u++)
+    // {
+    //     cout << first[u] << " ";
+    // }
+    // cout << endl;
+    // cout << "second:" << endl;
+    // for (int u = 0; u < second.size(); u++)
+    // {
+    //     cout << second[u] << " ";
+    // }
+
+    for (int j = 0; j < first.size(); j++) //goes through first vector
+    {
+        for (int k = 0; k < second.size(); k++) //anything that matches shuold be added
+        {
+
+            if (first[j] == second[k]) 
+            {
+                intersection.push_back(second[k]);
+            }
+        }
+    }
+    // cout << endl << "my intersection: " << endl;
+    // for (int i = 0; i < intersection.size(); i++)
+    // {
+    //     cout << intersection[i] << " ";
+    // }
+    // cout << endl;
+    //viewing purples
+    sort (intersection.begin(), intersection.end());
+    return intersection;
+}
+
+void RPN::get_bigger_first(vector<long>& one, vector<long>& two)
+{
+    //make first the biggest
+    vector<long> biggertemp;
+    vector<long> smallertemp;
+    if (one.size() > two.size())
+    {
+        //nothing to do! first is biggest thats all that matters for this loop
+    }
+    else
+    {
+        //hold values
+        biggertemp = two;
+        smallertemp = one;
+
+        //now swap (can be done with less im just parannoid)
+        one = biggertemp;
+        two = smallertemp;
+    }
+}
+
+void RPN::filter_repeats(vector<long>& vec)
+{
+    
 }
