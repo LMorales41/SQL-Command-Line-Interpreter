@@ -102,12 +102,21 @@ void RPN::do_rpn_thing(Map <string, long>& fieldMap, vector<MMap<string, long>>&
                 //cout << "union" << endl;
                 l1 = temp2->get_records();
                 l2 = temp3->get_records();
-                l3 = l1;
-                for (int z = 0; z < l2.size(); z++)
+                if (l1.size() == 0)
                 {
-                    l3.push_back(l2[z]);
+                    l3 = l2;
                 }
-
+                else if (l2.size() == 0)
+                {
+                    l3 = l1;
+                }
+                else
+                { 
+                    for (int z = 0; z < l2.size(); z++)
+                    {
+                        l3.push_back(l2[z]);
+                    }
+                }
                 sort(l3.begin(), l3.end());
                 auto last = std::unique(l3.begin(), l3.end()); //last will be itr where the dups are pushed to
                 l3.erase(last, l3.end()); //erases starting at last to end of vector
