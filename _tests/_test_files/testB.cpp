@@ -5,6 +5,7 @@
 #include "../../includes/table/table.h"
 #include "../../includes/parser/parser.h"
 #include "../../includes/table/typedefs.h"
+#include "../../includes/shunting_yard/shunting_yard.h"
 using namespace std;
 
 bool test_stub(bool debug = false)
@@ -82,75 +83,79 @@ bool test_tree(bool debug = false)
 
 bool test_sql(bool debug = false)
 {
-  bool debug2 = false;
-  if(debug)
-  {
-    SQL sql;
-    Table t;
-    Table playerTable;
-    Table clubsTable;
-    vectorstr commands = {
-      "make table players fields fname, lname, age, position, team",
-      "insert into players values Julian, Marin, 17, Winger, \"18AA\"",
-      "insert into players values Adam, Scott, 17, Winger, \"18AA\"",
-      "insert into players values Jared, Padilla, 18, Center, \"18AA\"",
-      "insert into players values Anthony, Aceves, 17, Defense, \"18AA\"",
-      "insert into players values Jayden, Deguzman, 16, Defense, \"16AA\"",
-      "insert into players values Aiden, Zakaria, 16, Center, \"16AA\"",
-      "insert into players values Collin, \"O'Brian\", 15, Winger, \"16AA\"",
-      "insert into players values Rafe, Armstrong, 16, Defense, \"16AA\"",
-      "insert into players values Taiki, Schneider, 16, Winger, \"16AA\"",
-      "insert into players values Garion, Barber, 16, Center, \"16AA\"",
-      "insert into players values Sebastian, Benavente, 16, Winger, \"16AA\"",
-      "insert into players values Liam, Carson, 11, Defense, \"12B\"",
-      "insert into players values Damien, Boucher, 11, Center, \"12B\"",
-      "insert into players values Bella, Gao, 11, Winger, \"12B\"",
-      "insert into players values Reagan, Ludlow, 11, Winger, \"12B\"",
-      "insert into players values Patrick, Guerra, 12, Defense, \"12B\"",
-      "insert into players values Qnoxx, \"Decker-Knealing\", 11, Winger, \"12B\"",
-      "make table clubs fields name, numTeams, championships, \"year founded\"",
-      "insert into clubs values Empire, 10, 06, 2010",
-      "insert into clubs values \"Jr. Kings\", 20, 45, 1996",
-      "insert into clubs values Wave, 16, 25, 2002",
-      "insert into clubs values \"Jr. Ducks\", 22, 40, 1998",
-      "insert into clubs values Bears, 18, 17, 1999",
-      "insert into clubs values \"Maple Leafs\", 08, 03, 2004",
-      "insert into clubs values OC, 12, 08, 2008"
-    };
-    for(int i = 0; i < commands.size(); i++)
-    {
-      cout << ">" << commands[i] << endl;
-      t = sql.command(commands[i]);
-      if(i == 17)
-        playerTable = t;
-      // cout << "__________\n\n" << t << "________\n"; //inserts and makes work
-    }
-    clubsTable = t;
-    cout << playerTable << "______\n\n" << clubsTable << "\n_____\n";
-    vectorstr select_commands = {
-      // "select lname, age, fname from players where lname > G and fname < H or age <= 16"
-      "select * from clubs",
-      "select name from clubs where \"year founded\" <= 2001 and \"year founded\" > 2001",//and
-      "select fname from players where position = Defense or age >= 17 and fname > J",//or and
-      "select fname, lname from players where fname > H and lname < K and position = Defense",//and and
-      "select team, fname from players where fname > J and fname < T or team >= \"16\" and age <= 17",//and or and
-      "select lname, fname, age from players where position = Winger or age >=16 and position = Defense or lname < N",//or and or
-      "select * from players where age > 19 or fname > J",//empty or full solution
-      "select * from players where age <= 17 or fname = Alex",//full or empty
-      "select * from players where age > 19 or fname = Alex",//empty or empty
-      "select * from players where age > 19 and fname > J",//empty and full
-      "select lname, fname, position from players where age <= 17 and fname = Alex",//full and empty
-      "select lname, fname, position from players where age > 18 and fname = Alex",//empty and empty
-      "select lname, fname, position from players where (age <= 16 or fname > J and (lname > D)) and position = Defense"
-    };
+  // bool debug2 = false;
+  // if(debug)
+  // {
+  //   SQL sql;
+  //   Table t;
+  //   Table playerTable;
+  //   Table clubsTable;
+  //   vectorstr commands = {
+  //     "make table players fields fname, lname, age, position, team",
+  //     "insert into players values Julian, Marin, 17, Winger, \"18AA\"",
+  //     "insert into players values Adam, Scott, 17, Winger, \"18AA\"",
+  //     "insert into players values Jared, Padilla, 18, Center, \"18AA\"",
+  //     "insert into players values Anthony, Aceves, 17, Defense, \"18AA\"",
+  //     "insert into players values Jayden, Deguzman, 16, Defense, \"16AA\"",
+  //     "insert into players values Aiden, Zakaria, 16, Center, \"16AA\"",
+  //     "insert into players values Collin, \"O'Brian\", 15, Winger, \"16AA\"",
+  //     "insert into players values Rafe, Armstrong, 16, Defense, \"16AA\"",
+  //     "insert into players values Taiki, Schneider, 16, Winger, \"16AA\"",
+  //     "insert into players values Garion, Barber, 16, Center, \"16AA\"",
+  //     "insert into players values Sebastian, Benavente, 16, Winger, \"16AA\"",
+  //     "insert into players values Liam, Carson, 11, Defense, \"12B\"",
+  //     "insert into players values Damien, Boucher, 11, Center, \"12B\"",
+  //     "insert into players values Bella, Gao, 11, Winger, \"12B\"",
+  //     "insert into players values Reagan, Ludlow, 11, Winger, \"12B\"",
+  //     "insert into players values Patrick, Guerra, 12, Defense, \"12B\"",
+  //     "insert into players values Qnoxx, \"Decker-Knealing\", 11, Winger, \"12B\"",
+  //     "make table clubs fields name, numTeams, championships, \"year founded\"",
+  //     "insert into clubs values Empire, 10, 06, 2010",
+  //     "insert into clubs values \"Jr. Kings\", 20, 45, 1996",
+  //     "insert into clubs values Wave, 16, 25, 2002",
+  //     "insert into clubs values \"Jr. Ducks\", 22, 40, 1998",
+  //     "insert into clubs values Bears, 18, 17, 1999",
+  //     "insert into clubs values \"Maple Leafs\", 08, 03, 2004",
+  //     "insert into clubs values OC, 12, 08, 2008"
+  //   };
+  //   for(int i = 0; i < commands.size(); i++)
+  //   {
+  //     cout << ">" << commands[i] << endl;
+  //     t = sql.command(commands[i]);
+  //     if(i == 17)
+  //       playerTable = t;
+  //     // cout << "__________\n\n" << t << "________\n"; //inserts and makes work
+  //   }
+  //   clubsTable = t;
+  //   cout << playerTable << "______\n\n" << clubsTable << "\n_____\n";
+  //   vectorstr select_commands = {
+  //     // "select lname, age, fname from players where lname > G and fname < H or age <= 16"
+  //     "select * from clubs",
+  //     "select name from clubs where \"year founded\" <= 2001 and \"year founded\" > 2001",//and
+  //     "select fname from players where position = Defense or age >= 17 and fname > J",//or and
+  //     "select fname, lname from players where fname > H and lname < K and position = Defense",//and and
+  //     "select team, fname from players where fname > J and fname < T or team >= \"16\" and age <= 17",//and or and
+  //     "select lname, fname, age from players where position = Winger or age >=16 and position = Defense or lname < N",//or and or
+  //     "select * from players where age > 19 or fname > J",//empty or full solution
+  //     "select * from players where age <= 17 or fname = Alex",//full or empty
+  //     "select * from players where age > 19 or fname = Alex",//empty or empty
+  //     "select * from players where age > 19 and fname > J",//empty and full
+  //     "select lname, fname, position from players where age <= 17 and fname = Alex",//full and empty
+  //     "select lname, fname, position from players where age > 18 and fname = Alex",//empty and empty
+  //     "select lname, fname, position from players where (age <= 16 or fname > J and (lname > D)) and position = Defense"
+  //   };
 
-    for(int i = 0; i < select_commands.size(); i++)
-    {
-      cout << "\n_____________\n\n" << ">" << select_commands[i] << endl << sql.command(select_commands[i]);
-      cout << sql.select_recnos() << "_________\n\n";
-    }
+  //   for(int i = 0; i < select_commands.size(); i++)
+  //   {
+  //     cout << "\n_____________\n\n" << ">" << select_commands[i] << endl << sql.command(select_commands[i]);
+  //     cout << sql.select_recnos() << "_________\n\n";
+  //   }
     
-  }
+  // }
+
+  vector <string> check = {"(", ")", "and", "or", "student", "76", "<", "and", ">", "or", "("};
+  shunting_yard sy (check);
+  sy.get_postfix();
   return true;
 }
 // bool test_one(bool debug = false)

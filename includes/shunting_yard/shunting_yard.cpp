@@ -42,52 +42,39 @@ void shunting_yard::turn_into_postfix() //please
 {
     Token* temp;
     Token* temp2;
-    //cout << "size: "<< tokenized.size() << endl;
     for (int i = 0; i < tokenized.size(); i++)
     {
         temp = tokenized[i];
-        //cout << "handling this token: " << temp->get_string() << endl;
-        //cout << endl;
         if (temp->get_type() == TokenType::TOKENSTR )
         {
-            //cout << "recognizes token as a tokenstr" << endl;
-            //cout << endl;
             postfix.push(temp);
         }
         else
         {
-            //cout << "recognizes token as a not tokenstr" << endl;
-            //cout << endl;
             if (rlstack.empty() == true)
             {
-                //cout << "pushes onto an empty stack" << endl;
-                //cout << endl;
                 rlstack.push(temp);
             }
             else if (temp->get_type() == TokenType::LPAREN)
             {
-                //cout << "recognizes it received a lparen" << endl;
-                //cout << endl;
                 rlstack.push(temp);
             }
             else if (temp->get_type() == TokenType::RPAREN)
             {
-                //cout << "recognizes it hit a rparen " << endl;
-                //pop until you hit lparen
-                temp = rlstack.pop();
-                while (temp->get_type() != TokenType::LPAREN)
+                //dont pop out here
+                while (rlstack.top()->get_type() != TokenType::LPAREN)
                 {
-                    postfix.push(temp);
-                    temp = rlstack.pop();
+                    //start popping in here
+                    postfix.push(rlstack.pop());
+
+                    //temp = rlstack.pop();
                 }
+                rlstack.pop();
             }
             else
-            {
-                //cout << "hits precedence check " << endl;
-                //cout << "this is at the top of stack: " << rlstack.top()->get_string() << endl;
+            {       //
                 if (temp->get_precedence() < rlstack.top()->get_precedence())
                 {
-                    //cout << "pops top of stack" << endl;
                     temp2 = rlstack.pop();
                     rlstack.push(temp);
                     postfix.push(temp2);
@@ -101,7 +88,6 @@ void shunting_yard::turn_into_postfix() //please
         }
     }
 
-    //now pop stack into queue until stack is empty
     while (!rlstack.empty())
     {
         postfix.push(rlstack.pop());

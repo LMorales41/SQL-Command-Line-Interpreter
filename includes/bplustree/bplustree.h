@@ -388,36 +388,29 @@ string BPlusTree<T>::post_order()
 template <typename T>
 T& BPlusTree<T>::get_existing(const T& entry)
 {
-    int here = first_ge(data, data_count, entry); //index to check
-    bool found = here <= data_count && data[here] == entry;
-    //cout << "here in find:" << here << endl;
-    //cout << " data: " << data[here] << " ";
-    if ( is_leaf()) 
-    {
-        //cout << "recognized as a leaf" << endl;
-        //cout << data[here] << endl;
-        if (found)
-        { 
-            // address @ data[here]
-            return data[here];
-            //return temp;
-        }
-        else{}
+    int index = first_ge(data, data_count, entry);
+    bool found = (index < data_count && data[index] == entry);
 
-    }
-    else if (found)
+    if (is_leaf())
     {
-        return data[here]; //changed this still working
-        /*if (data[here] != entry])
+        if (found)
         {
-            return subset[here]->find(entry);
-        }*/
+            return data[index];
+        }
+        else 
+        {
+            cout << "get_existing was called with a nonexistent entry" << endl;
+            assert(found);
+        }
     }
-    else 
+    if (found)
     {
-        return subset[here+found]->get_existing(entry);
+        return subset[index+1]->get_existing(entry);
     }
-    return data[here];//not proper but compiler complains without
+    else
+    {
+        return subset[index]->get_existing(entry);
+    }
 }
 template <typename T>
 const T& BPlusTree<T>::get(const T& entry)const
