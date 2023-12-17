@@ -131,7 +131,7 @@ bool test_sql(bool debug = false)
       // "select lname, age, fname from players where lname > G and fname < H or age <= 16"
       "select * from clubs",
       "select name from clubs where \"year founded\" <= 2001 and \"year founded\" > 2001",//and
-      "select fname from players where position = Defense or age >= 17 and fName > J",//or and
+      "select fname from players where position = Defense or age >= 17 and fname > J",//or and
       "select fname, lname from players where fname > H and lname < K and position = Defense",//and and
       "select team, fname from players where fname > J and fname < T or team >= \"16\" and age <= 17",//and or and
       "select lname, fname, age from players where position = Winger or age >=16 and position = Defense or lname < N",//or and or
@@ -151,23 +151,19 @@ bool test_sql(bool debug = false)
     }
     
   }
-
-
-
   return true;
 }
-
-bool test_one(bool debug = false)
-{
-  Table t ("game", {"name, year, rating"});
-  SQL sql;
-  vectorstr row = {"pokemon", "1986", "E"};
-  t.insert_into(row);
+// bool test_one(bool debug = false)
+// {
+//   Table t ("game", {"name, year, rating"});
+//   SQL sql;
+//   vectorstr row = {"pokemon", "1986", "E"};
+//   t.insert_into(row);
   
-  string line = "select * from game where year > 2000";
-  cout << sql.command(line) << endl;
-  return true;
-}
+//   string line = "select * from game where year > 2000";
+//   cout << sql.command(line) << endl;
+//   return true;
+// }
 
 TEST(TEST_STUB, TestStub) {
   
@@ -184,17 +180,17 @@ TEST(TEST_STUB, TestStub) {
 // }
 
 
-// TEST(TEST_SQL, TestSql) {
+TEST(TEST_SQL, TestSql) {
   
-//   //EXPECT_EQ(0, <your individual test functions are called here>);
+  //EXPECT_EQ(0, <your individual test functions are called here>);
 
-//   EXPECT_EQ(1, test_sql(true));
-// }
-
-TEST(TEST_ONE, TestOne)
-{
-  EXPECT_EQ(1, test_one(false));
+  EXPECT_EQ(1, test_sql(true));
 }
+
+// TEST(TEST_ONE, TestOne)
+// {
+//   EXPECT_EQ(1, test_one(false));
+// }
 
 
 

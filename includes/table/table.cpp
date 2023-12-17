@@ -318,6 +318,7 @@ Table Table::select(vectorstr fields, Queue<Token*> post)
 
     RPN rpn1(post);
     rpn1.do_rpn_thing(fieldMap,indices);
+    
     vector<long> field_recnos = rpn1.get_solution();
     sort(field_recnos.begin(), field_recnos.end());
 
