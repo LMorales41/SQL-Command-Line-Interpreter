@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20240203-0356-Experimental"
+	Name="(empty)"
+	Generator="ctest-3.27.4"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="macOS"
+	Hostname="Luiss-MacBook-Pro.local"
+	OSRelease="12.6.8"
+	OSVersion="21G725"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="61"
+	ProcessorCacheSize="32768"
+	NumberOfLogicalCPU="4"
+	NumberOfPhysicalCPU="2"
+	TotalVirtualMemory="2048"
+	TotalPhysicalMemory="16384"
+	LogicalProcessorsPerPhysical="8"
+	ProcessorClockFrequency="2700"
+	>
+	<Testing>
+		<StartDateTime>Feb 02 19:56 PST</StartDateTime>
+		<StartTestTime>1706932587</StartTestTime>
+		<TestList/>
+		<EndDateTime>Feb 02 19:56 PST</EndDateTime>
+		<EndTestTime>1706932587</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>
