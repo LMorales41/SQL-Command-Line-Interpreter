@@ -1,3 +1,0 @@
-# SQL-Command-Line-Interpreter
-C++ program that utilizes large quantities of algorithms and bplustree/mmap data structure to create tables for SQL and to parse the queries given to it.
-Data is put in using text files or through user input, and then once the data is fully input, we can use the Table class to turn the data into tables. We then give it as many commands as we want using SQL queries and it will return a table. The text is processed using state machines to tokenize strings given to it and the RPN algorithm to properly store the data in columns/rows. Bin files are created in order to retrive/store the data given and text files are created to store the columns and to sort out the columns when tables want to exclude certain rows or columns. 
