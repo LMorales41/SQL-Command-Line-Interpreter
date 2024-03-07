@@ -1,0 +1,4 @@
+C++ program that utilizes several algorithms and bplustree/mmap data structure to create tables for SQL and to parse the queries given to it.
+The program will take data to fill a table using either a text document or user input and will use Table class to create a table based off that data. This will create binary files that will have locations mapped to them. Using this location we can retrieve data when the user asks for it. The columns for this table will be stored in a .txt file. 
+When receiving a query or storing the data the program uses the RPN and Shunting Yard algorithms to properly store or retrive the data in the table. 
+Upon entering a query, the program will retrive all the data requested within the fields specified and will format them into a table. This data will once again be stored into a bin file with columns stored into a txt file for the Table class to retrieve and represent as a formatted table. 
